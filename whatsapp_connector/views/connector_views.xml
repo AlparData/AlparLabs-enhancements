@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <odoo>
-    <record model="ir.ui.view" id="view_whatsapp_connector_connector_tree">
-        <field name="name">acrux.chat.connector.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_connector_connector_list">
+        <field name="name">acrux.chat.connector.list</field>
         <field name="model">acrux.chat.connector</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="sequence" widget="handle" />
                 <field name="color" widget="color_picker" nolabel="1" />
                 <field name="name" />
@@ -12,7 +12,7 @@
                 <field name="auto_valid_number" widget="boolean_toggle"
                     invisible="connector_type != 'apichat.io'" />
                 <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -409,7 +409,7 @@
         <field name="name">Connectors</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.connector</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
 </odoo>

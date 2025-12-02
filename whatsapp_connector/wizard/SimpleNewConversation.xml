@@ -13,14 +13,14 @@
                 </group>
                 <group invisible="operation == 'open'">
                     <field name="conversation_ids" readonly="1" nolabel="1" colspan="2">
-                        <tree>
+                        <list>
                             <field name="name" />
                             <field name="number_format" />
                             <field name="agent_id" />
                             <field name="status" />
                             <button name="open_conversation" type="object" class="btn btn-primary"
                                 string="Open" />
-                        </tree>
+                        </list>
                     </field>
                 </group>
                 <footer>

@@ -34,11 +34,11 @@
         </field>
     </record>
 
-    <record id="view_agent_answer_time_report_tree" model="ir.ui.view">
-        <field name="name">agent.answer.time.report.view.tree</field>
+    <record id="view_agent_answer_time_report_list" model="ir.ui.view">
+        <field name="name">agent.answer.time.report.view.list</field>
         <field name="model">agent.answer.time.report</field>
         <field name="arch" type="xml">
-            <tree create="0" edit="0" delete="0">
+            <list create="0" edit="0" delete="0">
                 <field name="user_id" />
                 <field name="connector_id" />
                 <field name="contact_id" />
@@ -47,7 +47,7 @@
                 <field name="date_message" />
                 <field name="date_answer" />
                 <field name="answer_time" avg="Average" />
-            </tree>
+            </list>
         </field>
     </record>
     

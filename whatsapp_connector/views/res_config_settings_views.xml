@@ -123,14 +123,14 @@
                                     <i>Template name must begin with the word "<b>ChatRoom</b>".</i>
                                 </div>
                                 <div style="width: 40%; display: inline-block;">
-                                    <button name="open_resource_tree"
+                                    <button name="open_resource_list"
                                         class="btn-link" type="object"
                                         context="{'acrux_model': ['whatsapp_connector.model_acrux_chat_conversation']}"
                                         string="Chat" icon="fa-arrow-right"
                                     />
                                 </div>
                                 <div style="width: 40%; display: inline-block;">
-                                    <button name="open_resource_tree"
+                                    <button name="open_resource_list"
                                         class="btn-link" type="object"
                                         context="{'acrux_model': ['base.model_res_partner']}"
                                         string="Partner" icon="fa-arrow-right"

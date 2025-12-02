@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model="ir.ui.view" id="view_whatsapp_connector_ai_config_tree">
-        <field name="name">acrux.chat.ai.config.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_connector_ai_config_list">
+        <field name="name">acrux.chat.ai.config.list</field>
         <field name="model">acrux.chat.ai.config</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="sequence" widget="handle" />
                 <field name="active" widget="boolean_toggle" />
                 <field name="provider" />
@@ -12,7 +12,7 @@
                 <field name="operation_id" />
                 <field name="ai_model_id" />
                 <field name="company_id" groups="base.group_multi_company" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -174,7 +174,7 @@
         <field name="name">AI Config</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.ai.config</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_all': 1}</field>
     </record>
 </odoo>

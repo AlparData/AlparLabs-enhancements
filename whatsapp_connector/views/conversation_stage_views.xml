@@ -12,16 +12,16 @@
         </field>
     </record>
 
-    <!-- STAGES TREE VIEW + MUTI_EDIT -->
-    <record id="view_whatsapp_conversation_stage_tree" model="ir.ui.view">
-        <field name="name">acrux.chat.conversation.stage.tree</field>
+    <!-- STAGES list VIEW + MUTI_EDIT -->
+    <record id="view_whatsapp_conversation_stage_list" model="ir.ui.view">
+        <field name="name">acrux.chat.conversation.stage.list</field>
         <field name="model">acrux.chat.conversation.stage</field>
         <field name="arch" type="xml">
-            <tree string="Chat Funnels" multi_edit="1">
+            <list string="Chat Funnels" multi_edit="1">
                 <field name="sequence" widget="handle"/>
                 <field name="name" readonly="1"/>
                 <field name="fold" widget="boolean_toggle"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -55,7 +55,7 @@
     <record id="view_whatsapp_conversation_stage_action" model="ir.actions.act_window">
         <field name="name">Chat Funnels</field>
         <field name="res_model">acrux.chat.conversation.stage</field>
-        <field name="view_id" ref="view_whatsapp_conversation_stage_tree"/>
+        <field name="view_id" ref="view_whatsapp_conversation_stage_list"/>
     </record>
 
 </odoo>

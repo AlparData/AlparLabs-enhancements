@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model="ir.ui.view" id="view_whatsapp_connector_ai_usage_log_tree">
-        <field name="name">acrux.chat.ai.usage.log.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_connector_ai_usage_log_list">
+        <field name="name">acrux.chat.ai.usage.log.list</field>
         <field name="model">acrux.chat.ai.usage.log</field>
         <field name="arch" type="xml">
-            <tree create="0">
+            <list create="0">
                 <field name="company_id" invisible="1" />
                 <field name="create_date" />
                 <field name="user_id" />
@@ -16,7 +16,7 @@
                 <field name="sent_tokens" />
                 <field name="response_tokens" />
                 <field name="total_tokens" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -74,7 +74,7 @@
         <field name="name">AI Usage Log</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.ai.usage.log</field>
-        <field name="view_mode">tree,pivot</field>
+        <field name="view_mode">list,pivot</field>
         <field name="context">{'search_default_this_month': 1}</field>
     </record>
 

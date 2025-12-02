@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_acrux_chat_work_queue_tree" model="ir.ui.view">
-        <field name="name">acrux.chat.work.queue.tree</field>
+    <record id="view_acrux_chat_work_queue_list" model="ir.ui.view">
+        <field name="name">acrux.chat.work.queue.list</field>
         <field name="model">acrux.chat.work.queue</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="connector_id"/>
                 <field name="ttype"/>
                 <field name="number"/>
                 <field name="data" optional="hide"/>
                 <field name="trace_log" optional="hide"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -55,7 +55,7 @@
         <field name="name">Work Queue</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.work.queue</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_error': 1}</field>
         <!--<field name="domain">[('ttype', '!=', 'delete_me')]</field>-->
     </record>

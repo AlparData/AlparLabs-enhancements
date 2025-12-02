@@ -25,11 +25,11 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_whatsapp_template_waba_tree">
-        <field name="name">acrux.chat.template.waba.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_template_waba_list">
+        <field name="name">acrux.chat.template.waba.list</field>
         <field name="model">acrux.chat.template.waba</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="connector_id" />
                 <field name="name" />
                 <field name="template_id" />
@@ -39,7 +39,7 @@
                 <field name="template_type" />
                 <field name="status" />
                 <field name="category" optional="hide" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -65,10 +65,10 @@
                             <field name="data" />
                             <field name="meta" />
                             <field name="param_ids">
-                                <tree create="0" delete="0" editable="bottom">
+                                <list create="0" delete="0" editable="bottom">
                                     <field name="key" readonly="1" />
                                     <field name="value" required="1" />
-                                </tree>
+                                </list>
                             </field>
                             <field name="ready_to_create_template" invisible="1" />
                             <button name="create_mail_template" type="object" string="Create/Update Mail Template"
@@ -113,7 +113,7 @@
         <field name="name">Template WaBa</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.template.waba</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
 </odoo>

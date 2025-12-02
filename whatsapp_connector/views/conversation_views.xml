@@ -43,12 +43,12 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_inline_tree">
-        <field name="name">acrux.chat.conversation.inline.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_inline_list">
+        <field name="name">acrux.chat.conversation.inline.list</field>
         <field name="model">acrux.chat.conversation</field>
         <field name="priority">30</field>
         <field name="arch" type="xml">
-            <tree editable="bottom" delete="false" create="false">
+            <list editable="bottom" delete="false" create="false">
                 <field name="connector_id" widget="selection" readonly="1" />
                 <field name="number" readonly="1" />
                 <field name="conv_type" readonly="1" />
@@ -57,15 +57,15 @@
                 <field name="res_partner_id" widget="selection" readonly="1" />
                 <field name="company_id" invisible="1" />
                 <field name="valid_number" invisible="1" />
-            </tree>
+            </list>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_tree">
-        <field name="name">acrux.chat.conversation.tree</field>
+    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_list">
+        <field name="name">acrux.chat.conversation.list</field>
         <field name="model">acrux.chat.conversation</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="conv_type" />
                 <field name="number_format" />
@@ -80,7 +80,7 @@
                 <field name="last_activity" optional="hide" />
                 <field name="company_id" invisible="1" />
                 <field name="connector_type" invisible="1" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -443,13 +443,13 @@
         <field name="name">Conversation</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">acrux.chat.conversation</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'please_log_event': True}</field>
     </record>
-    <record model="ir.actions.act_window.view" id="conversation_action_tree">
+    <record model="ir.actions.act_window.view" id="conversation_action_list">
         <field name="sequence" eval="30" />
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_whatsapp_connector_conversation_tree" />
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_whatsapp_connector_conversation_list" />
         <field name="act_window_id" ref="view_whatsapp_connector_conversation_action" />
     </record>
     <record model="ir.actions.act_window.view" id="conversation_action_form">
