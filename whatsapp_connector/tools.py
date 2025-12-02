@@ -13,7 +13,7 @@ import phonenumbers
 from PIL import Image
 from odoo import fields, _, SUPERUSER_ID
 from odoo.exceptions import UserError
-from odoo.tools import image_process, image_to_base64, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools import image_process, DEFAULT_SERVER_DATETIME_FORMAT
 _logger = logging.getLogger(__name__)
 
 TIMEOUT = (10, 20)
@@ -279,6 +279,10 @@ def extra_phone_check(numobj):
                     break
     return out
 
+def image_to_base64(image, format, **kwargs):
+    stream = io.BytesIO()
+    image.save(stream, format=format, **kwargs)
+    return base64.b64encode(stream.getvalue())
 
 def image2jpg(env, content):
     if not content:
