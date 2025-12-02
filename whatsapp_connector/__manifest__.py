@@ -19,7 +19,7 @@
                ' apichat.io GupShup Chat-Api ChatApi. Whatsapp, Instagram DM, FaceBook Messenger. ChatRoom 2.0.',
     'description': 'Send Product, Real All in One. Send and receive messages. Real ChatRoom. WhatsApp integration. '
                    'WhatsApp Connector. apichat.io. GupShup. Chat-Api. ChatApi. Drag and Drop. ChatRoom 2.0.',
-    'version': '18.0.30.0',
+    'version': '18.0.30.1',
     'author': 'AcruxLab',
     'live_test_url': 'https://chatroom.acruxlab.com/web/signup',
     'support': 'info@acruxlab.com',
@@ -37,12 +37,12 @@
         'product'
     ],
     'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
         'data/data.xml',
         'data/cron.xml',
         'data/ai_config_data.xml',
         'data/mail_activity_type_data.xml',
-        'security/security.xml',
-        'security/ir.model.access.csv',
         'wizard/CustomMessage.xml',
         'wizard/init_free_test.xml',
         'wizard/MessageWizard.xml',
