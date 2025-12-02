@@ -40,7 +40,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/data.xml',
-        'data/cron.xml',
+        #'data/cron.xml',
         'data/ai_config_data.xml',
         'data/mail_activity_type_data.xml',
         'wizard/CustomMessage.xml',
