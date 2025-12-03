@@ -1629,10 +1629,7 @@ this.canPlay=typeof(Audio)!=='undefined'
 if(this.canPlay){this.audio=new Audio()
 if(this.audio.canPlayType('audio/ogg; codecs=vorbis')){this.audio.src=url('/mail/static/src/audio/ting.ogg')}else{this.audio.src=url('/mail/static/src/audio/ting.mp3')}}
 this.notifactionsHash=new Map()
-const subscribe=(type)=>{return[type,(payload)=>{try{this.onNotifaction([{type,payload}])}catch(e){console.error(e)}}]}
-this.env.services.bus_service.subscribe(...subscribe('new_messages'))
-this.env.services.bus_service.subscribe(...subscribe('opt_in'))
-this.env.services.bus_service.subscribe(...subscribe('error_messages'))
+this.env.services.bus_service.addEventListener('notification',({detail:n})=>{for(const{type,payload}of n){if(['new_messages','opt_in','error_messages'].includes(type)){try{this.onNotifaction([{type,payload}])}catch(e){console.error(e)}}}})
 window.addEventListener('storage',this.onStorage.bind(this))
 this.env.bus.addEventListener('last-dialog',({detail:lastDialog})=>{this.lastDialog=lastDialog})},onNotifaction(data){if(data&&data.length){let json=JSON.stringify(data)
 if(this.isChatroomTab()){browser.localStorage.setItem('chatroom_notification',json);}else{this.notifactionsHash.set(json,setTimeout(async()=>{await this.process(data)
