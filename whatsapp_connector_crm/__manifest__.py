@@ -17,7 +17,7 @@
                'apichat.io GupShup Chat-Api ChatApi. Whatsapp, Instagram DM, FaceBook Messenger. ChatRoom 2.0.',
     'description': 'Create Leads from ChatRoom. Send message from CRM Lead. WhatsApp integration. WhatsApp Connector. '
                    'apichat.io. GupShup. Chat-Api. ChatApi. ChatRoom 2.0.',
-    'version': '18.0.2.02',
+    'version': '18.0.2.03',
     'author': 'AcruxLab',
     'live_test_url': 'https://chatroom.acruxlab.com/web/signup',
     'support': 'info@acruxlab.com',
