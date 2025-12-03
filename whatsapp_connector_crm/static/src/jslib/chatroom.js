@@ -32,8 +32,8 @@ patch(TabsContainer.components,{CrmLeadForm,})
 return __exports;});;
 odoo.define('@2e55e6e145857aeeb31103e6c01fc409cbce30a46d44a27114ce5bc5c2881088',['@web/core/utils/patch','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{patch}=require('@web/core/utils/patch')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
-const chatroomCrm={constructor(comp,base){super.constructor(comp,base)
-this.lead={id:0,name:''}},updateFromJson(base){super.updateFromJson(base)
+const chatroomCrm={updateFromJson(base){super.updateFromJson(base)
+if(!this.lead){this.lead={id:0,name:''}}
 if('crm_lead_id'in base){this.lead=this.convertRecordField(base.crm_lead_id)}}}
 patch(ConversationModel.prototype,chatroomCrm)
 return __exports;});;
