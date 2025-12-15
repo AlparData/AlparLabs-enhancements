@@ -2,6 +2,7 @@
 
 import { patch } from "@web/core/utils/patch";
 import { _t } from "@web/core/l10n/translation";
+import { user } from "@web/core/user";
 import { TabsContainer } from "@af0df1a5affde864bfaca0edba19137ac4e7199f2cb7ae310c45d7b47aaac68b";
 import { ChatroomActionTab } from "@103c7d79cc526d077aeb6c0d794e9325b026ab588961f8ee74e08fcae5becbcb";
 import { ConversationModel } from "@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef";
@@ -28,7 +29,7 @@ export class CrmLeadForm extends ChatroomActionTab {
             default_phone: conv.numberFormat,
             default_name: `${connectorName}: ${convName}`,
             default_contact_name: convName,
-            default_user_id: this.env.services.user.userId,
+            default_user_id: user.userId,
         });
 
         if (conv.team && conv.team.id) {
