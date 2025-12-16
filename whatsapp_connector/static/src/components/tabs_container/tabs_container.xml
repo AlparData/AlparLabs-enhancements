@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="whatsapp_connector.TabsContainer" owl="1">
+        <div class="o_tabs_container d-flex flex-column h-100 bg-white border-start">
+            <!-- Tab Headers -->
+            <ul class="nav nav-tabs nav-fill">
+                <t t-foreach="tabs" t-as="tab" t-key="tab[0]">
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                           t-att-class="{ 'active': state.activeTab === tab[0] }"
+                           href="#"
+                           t-on-click.prevent="() => this.selectTab(tab[0])">
+                            <t t-esc="tab[1].title" />
+                        </a>
+                    </li>
+                </t>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content flex-grow-1 overflow-auto p-3">
+                <t t-foreach="tabs" t-as="tab" t-key="tab[0]">
+                    <t t-if="state.activeTab === tab[0]">
+                        <t t-component="tab[1].component" selectedConversation="props.selectedConversation" />
+                    </t>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -90,6 +90,7 @@
             'whatsapp_connector/static/src/scss/chatroom.scss',
             'whatsapp_connector/static/src/core/chat_store.js',
             'whatsapp_connector/static/src/core/chat_service.js',
+            'whatsapp_connector/static/src/core/chatroom_registry.js',
             'whatsapp_connector/static/src/components/chatroom/chatroom.js',
             'whatsapp_connector/static/src/components/chatroom/chatroom.xml',
             'whatsapp_connector/static/src/components/conversation_list/conversation_list.js',
@@ -98,6 +99,8 @@
             'whatsapp_connector/static/src/components/thread/thread.xml',
             'whatsapp_connector/static/src/components/composer/composer.js',
             'whatsapp_connector/static/src/components/composer/composer.xml',
+            'whatsapp_connector/static/src/components/tabs_container/tabs_container.js',
+            'whatsapp_connector/static/src/components/tabs_container/tabs_container.xml',
             # 'whatsapp_connector/static/jslib/chatroom.js', # Legacy bundled file (keep for now until fully replaced)
         ],
     },

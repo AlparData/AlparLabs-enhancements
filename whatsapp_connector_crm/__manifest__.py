@@ -39,8 +39,9 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'whatsapp_connector_crm/static/src/components/*/*.xml',
-            'whatsapp_connector_crm/static/src/jslib/chatroom.js',
+            'whatsapp_connector_crm/static/src/components/crm_lead_panel/crm_lead_panel.js',
+            'whatsapp_connector_crm/static/src/components/crm_lead_panel/crm_lead_panel.xml',
+            # 'whatsapp_connector_crm/static/src/jslib/chatroom.js',
         ],
     },
 }

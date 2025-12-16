@@ -6,6 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { chatStore } from "../../core/chat_store";
 import { ConversationList } from "../conversation_list/conversation_list";
 import { Thread } from "../thread/thread";
+import { TabsContainer } from "../tabs_container/tabs_container";
 
 export class Chatroom extends Component {
     setup() {
@@ -19,6 +20,6 @@ export class Chatroom extends Component {
 }
 
 Chatroom.template = "whatsapp_connector.Chatroom";
-Chatroom.components = { ConversationList, Thread };
+Chatroom.components = { ConversationList, Thread, TabsContainer };
 
-registry.category("actions").add("whatsapp_connector.chatroom_client_action", Chatroom);
+registry.category("actions").add("acrux.chat.conversation_tag", Chatroom);

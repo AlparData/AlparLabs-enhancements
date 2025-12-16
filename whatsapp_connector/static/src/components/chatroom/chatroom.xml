@@ -7,7 +7,14 @@
             </div>
             <div class="o_chatroom_main d-flex flex-column flex-grow-1">
                 <t t-if="store.selectedConversationId">
-                    <Thread conversationId="store.selectedConversationId" />
+                    <div class="d-flex h-100">
+                        <div class="flex-grow-1 d-flex flex-column">
+                            <Thread conversationId="store.selectedConversationId" />
+                        </div>
+                        <div class="o_chatroom_right_sidebar" style="width: 350px; min-width: 300px;">
+                            <TabsContainer selectedConversation="store.selectedConversationId" />
+                        </div>
+                    </div>
                 </t>
                 <t t-else="">
                     <div class="d-flex align-items-center justify-content-center h-100 text-muted">
