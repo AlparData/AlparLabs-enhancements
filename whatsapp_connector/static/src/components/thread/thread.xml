@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="whatsapp_connector.Thread" owl="1">
+        <div class="o_thread d-flex flex-column h-100">
+            <!-- Header -->
+            <div class="o_thread_header p-3 border-bottom bg-light">
+                <h5 class="mb-0" t-esc="store.conversations.find(c => c.id === props.conversationId)?.name" />
+            </div>
+
+            <!-- Messages -->
+            <div class="o_thread_messages flex-grow-1 overflow-auto p-3" t-ref="scrollable">
+                <t t-foreach="messages" t-as="message" t-key="message.id">
+                    <div class="d-flex mb-3" t-att-class="{ 'justify-content-end': message.from_me }">
+                        <div class="p-3 rounded shadow-sm" 
+                             t-att-class="message.from_me ? 'bg-primary text-white' : 'bg-white border'"
+                             style="max-width: 75%;">
+                            <div t-out="message.text" />
+                            <small class="d-block mt-1 opacity-75 text-end" style="font-size: 0.75rem;">
+                                <t t-esc="message.date_message" />
+                            </small>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Composer -->
+            <div class="o_thread_composer p-3 border-top">
+                <Composer conversationId="props.conversationId" />
+            </div>
+        </div>
+    </t>
+</templates>

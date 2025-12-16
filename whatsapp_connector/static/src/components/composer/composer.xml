@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="whatsapp_connector.Composer" owl="1">
+        <div class="o_composer input-group">
+            <textarea class="form-control" 
+                      rows="1" 
+                      placeholder="Type a message..." 
+                      t-model="state.text" 
+                      t-on-keydown="onKeydown"
+                      style="resize: none;" />
+            <button class="btn btn-primary" type="button" t-on-click="sendMessage">
+                <i class="fa fa-paper-plane" />
+            </button>
+        </div>
+    </t>
+</templates>

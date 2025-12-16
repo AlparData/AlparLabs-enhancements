@@ -1,0 +1,34 @@
+.o_chatroom_container {
+    background-color: #f9f9f9;
+    
+    .o_chatroom_sidebar {
+        background-color: #ffffff;
+        
+        .o_conversation_list {
+            .list-group-item {
+                border: none;
+                border-bottom: 1px solid #f0f0f0;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                
+                &:hover {
+                    background-color: #f8f9fa;
+                }
+                
+                &.active {
+                    background-color: #e9ecef;
+                    color: #212529;
+                    border-color: #dee2e6;
+                }
+            }
+        }
+    }
+    
+    .o_chatroom_main {
+        background-color: #e5ddd5; // WhatsApp-like background
+        
+        .o_thread_messages {
+            background-image: url('/whatsapp_connector/static/img/bg-chat.png'); // Optional background pattern
+        }
+    }
+}
