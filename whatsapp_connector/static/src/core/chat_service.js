@@ -4,9 +4,9 @@ import { registry } from "@web/core/registry";
 import { chatStore } from "./chat_store";
 
 export const chatService = {
-    dependencies: ["rpc", "bus_service", "orm"],
+    dependencies: ["bus_service", "orm"],
     
-    start(env, { rpc, bus_service, orm }) {
+    start(env, { bus_service, orm }) {
         let isInitialized = false;
 
         async function loadConversations() {
