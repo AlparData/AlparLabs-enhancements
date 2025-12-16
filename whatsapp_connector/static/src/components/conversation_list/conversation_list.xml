@@ -1,32 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="whatsapp_connector.ConversationList" owl="1">
-        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-            <h5 class="mb-0">Chats</h5>
-            <button class="btn btn-primary btn-sm rounded-circle" t-on-click="openNewConversationModal" title="New Chat">
-                <i class="fa fa-plus"/>
-            </button>
-        </div>
-        <div class="o_conversation_list list-group list-group-flush overflow-auto">
-            <t t-foreach="store.conversations" t-as="conversation" t-key="conversation.id">
-                <a href="#" 
-                   class="list-group-item list-group-item-action d-flex align-items-center py-3"
-                   t-att-class="{ 'active': conversation.id === store.selectedConversationId }"
-                   t-on-click.prevent="() => this.selectConversation(conversation.id)">
-                    <div class="flex-shrink-0">
-                        <img t-att-src="conversation.image_url" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;" />
-                    </div>
-                    <div class="flex-grow-1 ms-3 overflow-hidden">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <h6 class="mb-0 text-truncate" t-esc="conversation.name" />
-                            <small class="text-muted" t-esc="conversation.last_activity" />
+        <div class="d-flex flex-column h-100">
+            <!-- Header with New Chat -->
+            <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                <h5 class="mb-0">Chats</h5>
+                <button class="btn btn-primary btn-sm rounded-circle" t-on-click="openNewConversationModal" title="New Chat">
+                    <i class="fa fa-plus"/>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="d-flex border-bottom">
+                <button class="btn btn-link flex-grow-1 text-decoration-none rounded-0 py-2" 
+                        t-att-class="{ 'active fw-bold border-bottom border-primary': store.activeTab === 'mine', 'text-muted': store.activeTab !== 'mine' }"
+                        t-on-click="() => this.setTab('mine')">
+                    Mine
+                </button>
+                <button class="btn btn-link flex-grow-1 text-decoration-none rounded-0 py-2" 
+                        t-att-class="{ 'active fw-bold border-bottom border-primary': store.activeTab === 'unassigned', 'text-muted': store.activeTab !== 'unassigned' }"
+                        t-on-click="() => this.setTab('unassigned')">
+                    New
+                </button>
+                <button class="btn btn-link flex-grow-1 text-decoration-none rounded-0 py-2" 
+                        t-att-class="{ 'active fw-bold border-bottom border-primary': store.activeTab === 'all', 'text-muted': store.activeTab !== 'all' }"
+                        t-on-click="() => this.setTab('all')">
+                    All
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="p-2 border-bottom bg-light">
+                <input type="text" class="form-control form-control-sm" 
+                       placeholder="Search..." 
+                       t-model="store.searchQuery" 
+                       t-on-input="(ev) => this.onSearchInput(ev)"/>
+            </div>
+
+            <!-- List -->
+            <div class="o_conversation_list list-group list-group-flush overflow-auto flex-grow-1">
+                <t t-foreach="chatStore.filteredConversations" t-as="conversation" t-key="conversation.id">
+                    <a href="#" 
+                       class="list-group-item list-group-item-action py-3 lh-tight"
+                       t-att-class="{ 'active': conversation.id === store.selectedConversationId }"
+                       t-on-click="() => this.selectConversation(conversation.id)">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <strong class="mb-1 text-truncate" t-esc="conversation.name"/>
+                            <small t-if="conversation.last_activity" class="text-muted" t-esc="formatDate(conversation.last_activity)"/>
                         </div>
-                        <p class="mb-0 text-truncate small text-muted">
-                            <t t-esc="conversation.number_format" />
-                        </p>
-                    </div>
-                </a>
-            </t>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="small text-truncate text-muted mb-1" style="max-width: 70%;">
+                                <t t-esc="conversation.number_format"/>
+                            </div>
+                            <!-- Status Badge -->
+                            <span t-if="conversation.status === 'new'" class="badge rounded-pill bg-success">New</span>
+                            <span t-if="conversation.status === 'done'" class="badge rounded-pill bg-secondary">Done</span>
+                        </div>
+                        <!-- Agent Info (if not mine) -->
+                        <div t-if="conversation.agent_id" class="d-flex align-items-center mt-1">
+                            <i class="fa fa-user-circle me-1 text-muted"/>
+                            <small class="text-muted" t-esc="conversation.agent_id[1]"/>
+                        </div>
+                    </a>
+                </t>
+                <div t-if="chatStore.filteredConversations.length === 0" class="text-center p-3 text-muted">
+                    No conversations found
+                </div>
+            </div>
         </div>
     </t>
 </templates>

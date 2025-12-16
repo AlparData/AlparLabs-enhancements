@@ -4,7 +4,15 @@
         <Dialog title="'New Conversation'">
             <div class="p-3">
                 <div class="mb-3">
-                    <label class="form-label">Select Contact</label>
+                    <label class="form-label">Connector</label>
+                    <select class="form-select" t-model="state.connectorId">
+                        <t t-foreach="state.connectors" t-as="connector" t-key="connector.id">
+                            <option t-att-value="connector.id" t-esc="connector.name"/>
+                        </t>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contact (Optional)</label>
                     <Many2XAutocomplete
                         resModel="'res.partner'"
                         getDomain="() => []"
@@ -13,9 +21,14 @@
                         placeholder="'Search contact...'"
                     />
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" t-model="state.number" placeholder="+1234567890"/>
+                    <small class="text-muted">International format required</small>
+                </div>
             </div>
             <t t-set-slot="footer">
-                <button class="btn btn-primary" t-on-click="createConversation" t-att-disabled="!state.partnerId">
+                <button class="btn btn-primary" t-on-click="createConversation" t-att-disabled="!state.number || !state.connectorId">
                     Start Chat
                 </button>
                 <button class="btn btn-secondary" t-on-click="props.close">

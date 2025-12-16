@@ -10,6 +10,21 @@ export class ConversationList extends Component {
         this.store = useState(chatStore.state);
         this.chatService = useService("whatsapp_connector.chat_service");
         this.dialog = useService("dialog");
+        this.chatStore = chatStore; // Make store available to template
+    }
+
+    setTab(tab) {
+        chatStore.setTab(tab);
+    }
+
+    onSearchInput(ev) {
+        chatStore.setSearchQuery(ev.target.value);
+    }
+
+    formatDate(dateStr) {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     selectConversation(conversationId) {
