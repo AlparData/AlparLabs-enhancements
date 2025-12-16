@@ -838,6 +838,11 @@ class AcruxChatConversation(models.Model):
         return conv_id
 
     @api.model
+    def conversation_create_json(self, partner_id, connector_id, number):
+        conv = self.conversation_create(partner_id, connector_id, number)
+        return conv.id
+
+    @api.model
     def contact_update(self, connector_id, data):
         number = data.get('number', '')
         image_url = data.get('image_url') or ''

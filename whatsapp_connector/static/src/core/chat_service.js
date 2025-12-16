@@ -90,8 +90,8 @@ export const chatService = {
 
         async function createConversation(partnerId, connectorId, number) {
             try {
-                // Call conversation_create(partner_id, connector_id, number)
-                const conversationId = await orm.call("acrux.chat.conversation", "conversation_create", [partnerId, connectorId, number], {});
+                // Call conversation_create_json(partner_id, connector_id, number)
+                const conversationId = await orm.call("acrux.chat.conversation", "conversation_create_json", [partnerId, connectorId, number], {});
                 await loadConversations();
                 chatStore.selectConversation(conversationId);
             } catch (error) {
