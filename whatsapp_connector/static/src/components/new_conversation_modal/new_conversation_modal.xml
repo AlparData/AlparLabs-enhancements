@@ -19,6 +19,8 @@
                         value="state.partnerName"
                         update.bind="updatePartner"
                         placeholder="'Search contact...'"
+                        activeActions="{ create: false, create_edit: false }"
+                        fieldString="'Contact'"
                     />
                 </div>
                 <div class="mb-3">
