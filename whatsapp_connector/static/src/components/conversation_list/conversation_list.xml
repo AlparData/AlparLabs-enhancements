@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="whatsapp_connector.ConversationList" owl="1">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <h5 class="mb-0">Chats</h5>
+            <button class="btn btn-primary btn-sm rounded-circle" t-on-click="openNewConversationModal" title="New Chat">
+                <i class="fa fa-plus"/>
+            </button>
+        </div>
         <div class="o_conversation_list list-group list-group-flush overflow-auto">
             <t t-foreach="store.conversations" t-as="conversation" t-key="conversation.id">
                 <a href="#" 

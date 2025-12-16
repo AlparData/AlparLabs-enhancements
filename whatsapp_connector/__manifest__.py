@@ -101,6 +101,8 @@
             'whatsapp_connector/static/src/components/composer/composer.xml',
             'whatsapp_connector/static/src/components/tabs_container/tabs_container.js',
             'whatsapp_connector/static/src/components/tabs_container/tabs_container.xml',
+            'whatsapp_connector/static/src/components/new_conversation_modal/new_conversation_modal.js',
+            'whatsapp_connector/static/src/components/new_conversation_modal/new_conversation_modal.xml',
             # 'whatsapp_connector/static/jslib/chatroom.js', # Legacy bundled file (keep for now until fully replaced)
         ],
     },

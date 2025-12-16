@@ -21,5 +21,6 @@ export class Chatroom extends Component {
 
 Chatroom.template = "whatsapp_connector.Chatroom";
 Chatroom.components = { ConversationList, Thread, TabsContainer };
+Chatroom.props = { "*": true };
 
 registry.category("actions").add("acrux.chat.conversation_tag", Chatroom);

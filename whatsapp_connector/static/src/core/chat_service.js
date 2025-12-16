@@ -88,10 +88,25 @@ export const chatService = {
             isInitialized = true;
         }
 
+        async function createConversation(partnerId) {
+            try {
+                // Assuming backend has a method to get/create conversation for a partner
+                // If not, we might need to use 'create' on acrux.chat.conversation
+                // Let's try to find an existing one first or create
+                const conversationId = await orm.call("acrux.chat.conversation", "conversation_create", [partnerId], {});
+                await loadConversations();
+                chatStore.selectConversation(conversationId);
+            } catch (error) {
+                console.error("Error creating conversation:", error);
+                throw error;
+            }
+        }
+
         return {
             loadConversations,
             loadMessages,
             sendMessage,
+            createConversation,
         };
     },
 };
