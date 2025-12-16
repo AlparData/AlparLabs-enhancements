@@ -840,6 +840,10 @@ class AcruxChatConversation(models.Model):
     @api.model
     def conversation_create_json(self, partner_id, connector_id, number):
         conv = self.conversation_create(partner_id, connector_id, number)
+        conv.write({
+            'status': 'current',
+            'agent_id': self.env.user.id
+        })
         return conv.id
 
     @api.model
