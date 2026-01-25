@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="chatroom.ConversationList" t-inherit="chatroom.ConversationList" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_ChatTools')]/a" position="after">
+            <div class="o_Ai_bot_selector">
+                <SelectMenu t-props="botSelectProps" t-if="props.bots.length > 0" />
+            </div>
+        </xpath>
+        <xpath expr="(//Conversation)[1]" position="attributes">
+            <attribute name="bots">props.bots_map</attribute>
+        </xpath>
+        <xpath expr="(//Conversation)[2]" position="attributes">
+            <attribute name="bots">props.bots_map</attribute>
+        </xpath>
+    </t>
+
+</templates>

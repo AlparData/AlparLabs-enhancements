@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="chatroom.Chatroom" t-inherit="chatroom.Chatroom" t-inherit-mode="extension" owl="1">
+    
+        <xpath expr="//ConversationList" position="attributes">
+            <attribute name="bots">state.bots</attribute>
+            <attribute name="bots_map">state.bots_map</attribute>
+        </xpath>
+    
+        <xpath expr="//Toolbox" position="attributes">
+            <attribute name="bots">state.bots</attribute>
+            <attribute name="bots_map">state.bots_map</attribute>
+        </xpath>
+    </t>
+
+</templates>

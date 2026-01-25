@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="chatroom.Toolbox" t-inherit="chatroom.Toolbox" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_chat_toolbox_button_box')]/button[hasclass('o_chat_button_translate')]" position="after">
+            <t t-foreach="botProps" t-as="bot" t-key="bot.id">
+                <button class="o_chat_button_bot_generate o_chat_option_button"
+                    t-on-click="onBotGenerate"
+                    type="button"
+                    t-attf-class="{{ conversationMine }}"
+                    t-att-title="bot.name"
+                    t-att-data-id="bot.id"
+                    t-attf-style="{{
+                        bot.color_text and bot.color_text !== '#FFFFFF'
+                        ? 'color: ' + bot.color_text
+                        : ''
+                    }}">
+                        <i class="fa fa-android fa-lg" />
+                </button>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

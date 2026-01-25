@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem name="ChatBot"
+            id="whatsapp_connector_bot_root_menu"
+            parent="whatsapp_connector.whatsapp_connector_settings_menu"
+            sequence="150"/>
+        <menuitem
+                id="whatsapp_connector_bot_menu"
+                action="whatsapp_connector_bot_action"
+                parent="whatsapp_connector_bot.whatsapp_connector_bot_root_menu"
+                sequence="151"/>
+        <menuitem
+                id="whatsapp_connector_bot_log_menu"
+                action="whatsapp_connector_bot_log_action"
+                parent="whatsapp_connector_bot.whatsapp_connector_bot_root_menu"
+                sequence="152"/>
+
+    <menuitem name="ChatBot AI"
+            id="whatsapp_connector_bot_ai_root_menu"
+            parent="whatsapp_connector.whatsapp_connector_settings_menu"
+            sequence="149"/>
+        <menuitem
+                id="whatsapp_connector_ai_conversation_kanban_menu"
+                action="action_acrux_chat_conversation_ai"
+                parent="whatsapp_connector_bot.whatsapp_connector_bot_ai_root_menu"
+                sequence="20"/>
+        <menuitem
+                id="whatsapp_connector_ai_bot_menu"
+                action="whatsapp_connector_bot_ai_action"
+                parent="whatsapp_connector_bot.whatsapp_connector_bot_ai_root_menu"
+                sequence="30"/>
+        <menuitem
+                id="whatsapp_connector_ai_connector_menu"
+                action="acrux_chatbot_ai_connector_action"
+                parent="whatsapp_connector_bot.whatsapp_connector_bot_ai_root_menu"
+                sequence="40"/>
+
+</odoo>

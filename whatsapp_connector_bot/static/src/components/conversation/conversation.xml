@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="chatroom.Conversation" t-inherit="chatroom.Conversation" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('acrux_chat_conversation_tools')]/span[hasclass('o_number_new_msg')]" position="before">
+            <i class="fa fa-android me-1 fa-lg"
+                t-if="props.conversation.bot?.id and props.bots and props.bots[props.conversation.bot.id]"
+                t-attf-style="{{
+                    props.bots[props.conversation.bot.id].color_text and props.bots[props.conversation.bot.id].color_text !== '#FFFFFF'
+                    ? 'color: ' + props.bots[props.conversation.bot.id].color_text
+                    : ''
+                }}"
+                t-att-title="props.conversation.bot.name" />
+        </xpath>
+    </t>
+
+</templates>
