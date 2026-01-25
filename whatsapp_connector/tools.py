@@ -17,6 +17,12 @@ from odoo.tools import image_process, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.tools.image import image_to_base64
 _logger = logging.getLogger(__name__)
 
+
+def printlog(*args):
+    """Debug logging utility for bot operations"""
+    _logger.info(' '.join(str(arg) for arg in args))
+
+
 TIMEOUT = (10, 20)
 DEFAULT_IMAGE = 'placeholder.png'
 DEFAULT_IMAGE_URL = '/web/static/img/' + DEFAULT_IMAGE
