@@ -384,31 +384,31 @@
                 <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'
                     help="This bar allows to filter the chats based on scheduled activities." />
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click"
-                             t-attf-style="#{record.border_color.value == '#FFFFFF'? '': 'background-color: ' + record.border_color.value + '10; border-color: ' + record.border_color.value + '40;'}">
-                            <div class="oe_kanban_content">
-                                <div class="o_kanban_record_title d-flex justify-content-between">
-                                    <div class="mb-1">
-                                        <div class="o_acrux_social" t-if="record.show_icon.raw_value">
-                                            <div t-attf-class="acrux_#{record.connector_type.raw_value == 'facebook' ? 'facebook': record.connector_type.raw_value == 'instagram' ? 'instagram' : 'whatsapp'}"
-                                                 t-att-title="record.connector_id.value"></div>
-                                        </div>
-                                        <field name="name" />
+                    <t t-name="card">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}"
+                             t-attf-style="#{record.border_color.value == '#FFFFFF'? '': 'background-color: ' + record.border_color.value + '10; border-color: ' + record.border_color.value + '40;}">
+                            <div class="o_kanban_record_title d-flex justify-content-between">
+                                <div class="mb-1">
+                                    <div class="o_acrux_social" t-if="record.show_icon.raw_value">
+                                        <div t-attf-class="acrux_#{record.connector_type.raw_value == 'facebook' ? 'facebook': record.connector_type.raw_value == 'instagram' ? 'instagram' : 'whatsapp'}"
+                                             t-att-title="record.connector_id.value"></div>
                                     </div>
-                                    <div class="text-400 small" t-if="record.agent_id.value">
-                                        <field name="agent_id" widget="many2one_avatar_user" style="vertical-align: middle;" />
-                                    </div>
+                                    <field name="name" />
                                 </div>
-                                <div class="d-flex">
-                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
-                                        class="text-nowrap d-flex me-1" />
-                                    <span class="acrux_conversation_note text-600" style="margin-bottom: var(--KanbanRecord-gap-v);"
-                                        t-esc="record.note.value" t-att-title="record.note.value" />
+                                <div class="text-400 small" t-if="record.agent_id.value">
+                                    <field name="agent_id" widget="many2one_avatar_user" style="vertical-align: middle;" />
                                 </div>
                             </div>
-                            <div class="o_kanban_record_bottom">
-                                <div class="oe_kanban_bottom_left">
+                            <div class="d-flex">
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
+                                    class="text-nowrap d-flex me-1" />
+                                <span class="acrux_conversation_note text-600"
+                                    t-esc="record.note.value" t-att-title="record.note.value" />
+                            </div>
+                        </div>
+                        <footer>
+                            <div class="d-flex justify-content-between w-100">
+                                <div>
                                     <field name="priority" widget="priority" groups="base.group_user" class="me-0" />
                                     <field name="activity_ids" widget="kanban_activity" class="me-0 px-0" />
                                     <button class="btn btn-sm text-primary fa fa-paper-plane px-0" type="action"
@@ -417,13 +417,12 @@
                                         context="{'default_invisible_top': True, 'default_conversation_id': id, 'full_name': True}" />
                                     <button class="btn btn-sm text-primary fa fa-pencil me-0 px-0" type="edit" title="Edit" />
                                 </div>
-                                <div class="oe_kanban_bottom_right">
+                                <div>
                                     <field name="status" widget="label_selection"
                                            options="{'classes': {'new': 'success', 'current': 'info', 'done': 'default'}}"/>
                                 </div>
                             </div>
-                            <div class="oe_clear" />
-                        </div>
+                        </footer>
                     </t>
                 </templates>
             </kanban>
