@@ -21,6 +21,10 @@ TIMEOUT = (10, 20)
 DEFAULT_IMAGE = 'placeholder.png'
 DEFAULT_IMAGE_URL = '/web/static/img/' + DEFAULT_IMAGE
 
+def printlog(*args):
+    """Debug logging utility for bot operations"""
+    _logger.info(' '.join(str(arg) for arg in args))
+
 
 def log_request_error(param, req=None):
     try:
