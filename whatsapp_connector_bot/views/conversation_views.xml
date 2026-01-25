@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- form admin -->
+    <record model="ir.ui.view" id="view_acrux_chat_conversation_form_admin">
+        <field name="name">acrux.chat.conversation.ai.form</field>
+        <field name="model">acrux.chat.conversation</field>
+        <field name="inherit_id" ref="whatsapp_connector.view_whatsapp_connector_conversation_form_admin" />
+        <field name="arch" type="xml">
+            <field name="agent_id" position="after">
+                <field name="bot_id"/>
+                <field name="ai_bot_served_by"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- AI Kanban -->
+    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_kanban_ai">
+        <field name="name">acrux.chat.conversation.kanban AI</field>
+        <field name="model">acrux.chat.conversation</field>
+        <field name="inherit_id" ref="whatsapp_connector.view_whatsapp_connector_conversation_kanban" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="before">
+                <field name="ai_bot_served_by" />
+                <field name="bot_id" options='{"group_by_tooltip": {"name": "Description"}}' />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- AI Search -->
+    <record model="ir.ui.view" id="view_whatsapp_connector_conversation_search_ai">
+        <field name="name">acrux.chat.conversation.ai.form</field>
+        <field name="model">acrux.chat.conversation</field>
+        <field name="inherit_id" ref="whatsapp_connector.view_whatsapp_connector_conversation_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='number']" position="after">
+                <field name="bot_id"/>
+                <field name="ai_bot_served_by"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_stage']" position="before">
+                <filter name="group_by_bot" string="Bot" context="{'group_by':'bot_id'}" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- AI Tree -->
+    <record id="view_acrux_chat_conversation_tree_ai" model="ir.ui.view">
+        <field name="name">acrux.chat.conversation.tree</field>
+        <field name="model">acrux.chat.conversation</field>
+        <field name="priority">25</field>
+        <field name="arch" type="xml">
+            <list string="Chat Conversations">
+                <field name="name"/>
+                <field name="agent_id"/>
+                <field name="bot_id"/>
+                <field name="ai_bot_served_by"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- AI Action -->
+    <record id="action_acrux_chat_conversation_ai" model="ir.actions.act_window">
+        <field name="name">AI Panel</field>
+        <field name="res_model">acrux.chat.conversation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+        (0, 0, {'view_mode': 'kanban'}),
+        (0, 0, {'view_mode': 'list', 'view_id': ref('view_acrux_chat_conversation_tree_ai')}),
+        (0, 0, {'view_mode': 'form'})]"/>
+        <field name="context">{'search_default_3_days': True, 'search_default_group_by_bot': True, 'please_log_event': True}</field>
+    </record>
+
+</odoo>

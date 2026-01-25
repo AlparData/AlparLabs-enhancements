@@ -1,22 +1,22 @@
 
-.o_content div.o_list_view.chat_bot_list table tr td div[name="product_image"] img[name="product_image"] {
+.o_content div.o_list_view.chat_bot_tree table tr td div[name="product_image"] img[name="product_image"] {
     max-width: 40px;
 }
 
-.chat_bot_list span.bot_route,
-.chat_bot_list span.bot_route_end,
-.chat_bot_list span.bot_route_last {
+.chat_bot_tree span.bot_route,
+.chat_bot_tree span.bot_route_end,
+.chat_bot_tree span.bot_route_last {
     padding-left: 50px;
     position: relative;
 }
 
-.chat_bot_list span.bot_route img,
-.chat_bot_list span.bot_route_end img,
-.chat_bot_list span.bot_route_last img {
+.chat_bot_tree span.bot_route img,
+.chat_bot_tree span.bot_route_end img,
+.chat_bot_tree span.bot_route_last img {
     margin-left: -10px;
 }
 
-.chat_bot_list img.acrux_m2o_avatar {
+.chat_bot_tree img.acrux_m2o_avatar {
     border-radius: 25%;
     width: 39px;
     height: 39px;
@@ -26,9 +26,9 @@
     box-shadow: 1px 1px 5px 0px #bdbdbd;
 }
 
-.chat_bot_list .bot_route:after,
-.chat_bot_list .bot_route_end:after,
-.chat_bot_list .bot_route_last:after {
+.chat_bot_tree .bot_route:after,
+.chat_bot_tree .bot_route_end:after,
+.chat_bot_tree .bot_route_last:after {
     content: '';
     background-color: white;
     border: 0px solid #bfbfbf;
@@ -41,8 +41,8 @@
     right: auto;
 }
 
-.chat_bot_list .bot_route_end:before,
-.chat_bot_list .bot_route_last:before {
+.chat_bot_tree .bot_route_end:before,
+.chat_bot_tree .bot_route_last:before {
     content: '';
     background-color: white;
     border: 0px solid #bfbfbf;
@@ -56,15 +56,15 @@
     right: auto;
 }
 
-.chat_bot_list .bot_route .bot_route:after {
+.chat_bot_tree .bot_route .bot_route:after {
     border-left-width: 0;
 }
 
-.chat_bot_list .bot_route_last:after {
+.chat_bot_tree .bot_route_last:after {
     top: -50px;
 }
 
-.chat_bot_list .bot_route_match {
+.chat_bot_tree .bot_route_match {
     color: darkred;
 }
 
@@ -78,11 +78,61 @@
     border: 1px solid #a8a8a8;
 }
 
-.chat_bot_list .table > tbody > tr:not(.o_list_table_grouped) > td.o_html_cell {
+.chat_bot_tree .table > tbody > tr:not(.o_list_table_grouped) > td.o_html_cell {
     padding-top: 0!important;
     padding-bottom: 0!important;
 }
-.chat_bot_list .table > tbody > tr:not(.o_list_table_grouped) > td.o_html_cell div.oe_form_field_html {
+.chat_bot_tree .table > tbody > tr:not(.o_list_table_grouped) > td.o_html_cell div.oe_form_field_html {
     padding-top: 6px;
     padding-bottom: 6px;
+}
+.acrux_bot {
+    border-radius: 5px;
+    /* verde */
+    --bot_bg_color: rgba(40, 167, 69, 0.1);
+    --bot_bg_color_start: rgba(74, 167, 40, 0.01);
+    padding-right: unset;
+    padding-left: unset;
+    /*border: 1px solid var(--primary);
+    padding-right: 0;
+    padding-left: 0;*/
+    .o_horizontal_separator {
+        background: linear-gradient(to bottom, transparent, var(--bot_bg_color));
+        background-color: var(--bot_bg_color_start);
+        border-radius: 5px;
+        margin-top: 0 !important;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+}
+.bot_bg_color_green {
+    --bot_bg_color_start: rgba(74, 167, 40, 0.01);
+    --bot_bg_color: rgba(74, 167, 40, 0.1);
+    background: linear-gradient(to bottom, var(--bot_bg_color_start), var(--bot_bg_color));
+}
+.bot_bg_color_blue {
+    --bot_bg_color_start: rgba(40, 114, 167, 0.01);
+    --bot_bg_color: rgba(40, 114, 167, 0.1);
+    background: linear-gradient(to bottom, var(--bot_bg_color_start), var(--bot_bg_color));
+}
+.bot_bg_color_red {
+    --bot_bg_color_start: rgba(167, 40, 40, 0.01);
+    --bot_bg_color: rgba(167, 40, 40, 0.1);
+    background: linear-gradient(to bottom, var(--bot_bg_color_start), var(--bot_bg_color));
+}
+.acrux_clean_sheet {
+    .o_form_sheet {
+        /*border-style: hidden;*/
+        .ribbon-top-right {
+                margin-right: 1px;
+        }
+    }
+}
+
+/* Chatroom */
+.o_Ai_bot_selector {
+    margin-right: 6px;
+    button.btn {
+        padding: 0.1rem 0.2rem;
+    }
 }

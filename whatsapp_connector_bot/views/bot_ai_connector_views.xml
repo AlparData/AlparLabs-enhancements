@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="acrux_chatbot_ai_connector_search" model="ir.ui.view">
+        <field name="name">acrux.chat.bot.ai.connector.search</field>
+        <field name="model">acrux.chat.bot.ai.connector</field>
+        <field name="arch" type="xml">
+            <search string="AI Connectors">
+                <field name="name" />
+                <field name="uuid" />
+            </search>
+        </field>
+    </record>
+
+    <record id="acrux_chatbot_ai_connector_tree" model="ir.ui.view">
+        <field name="name">acrux.chat.bot.ai.connector.tree</field>
+        <field name="model">acrux.chat.bot.ai.connector</field>
+        <field name="arch" type="xml">
+            <list string="AI Connectors">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="uuid" />
+            </list>
+        </field>
+    </record>
+
+    <record id="acrux_chatbot_ai_connector_form" model="ir.ui.view">
+        <field name="name">acrux.chat.bot.ai.connector.form</field>
+        <field name="model">acrux.chat.bot.ai.connector</field>
+        <field name="priority" eval="1" />
+        <field name="arch" type="xml">
+            <form string="AI Connectors">
+                <sheet>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name" />
+                        </div>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <div class="col-12 mt-4 mb-2" invisible="chatroom_hide_branding == True">
+                        <span>Hire the service in </span>
+                        <b>
+                            <a href="https://acruxlab.com/plans-ai" target="_blank">acruxlab.com/plans-ai</a>
+                        </b>
+                        <span> and we give you the ID and Token.</span>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="uuid" />
+                            <field name="token" password="True" class="acrux-editor-highlight" />
+                            <field name="endpoint" />
+                            <field name="verify" />
+                            <field name="sequence" invisible="1" />  <!-- invisible: widget -->
+                            <field name="chatroom_hide_branding" invisible="1" />  <!-- invisible: ignore -->
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="acrux_chatbot_ai_connector_action" model="ir.actions.act_window">
+        <field name="name">AI Connectors</field>
+        <field name="res_model">acrux.chat.bot.ai.connector</field>
+        <field name="view_id" ref="acrux_chatbot_ai_connector_tree" />
+    </record>
+
+</odoo>

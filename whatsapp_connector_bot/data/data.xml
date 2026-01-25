@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- chat.bot -->
+    <record id="acrux_bot_to_human" model="acrux.chat.bot">
+        <field name="name">Human Agent</field>
+        <field name="sequence">900</field>
+        <field name="ai_bot_type">state</field>
+        <field name="is_ai" eval="True"/>
+    </record>
+
+    <!-- chat.bot.action.type -->
+    <record id="acrux_bot_action_type_to_human" model="acrux.chat.bot.action.type">
+        <field name="name">Switch to Human</field>
+        <field name="key">action_to_human</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="acrux_bot_action_type_to_close" model="acrux.chat.bot.action.type">
+        <field name="name">Close Chat</field>
+        <field name="key">action_close</field>
+        <field name="sequence">15</field>
+    </record>
+    <record id="acrux_bot_action_type_to_bot" model="acrux.chat.bot.action.type">
+        <field name="name">Switch to Another Bot</field>
+        <field name="key">action_to_switch_bot</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="acrux_bot_action_contact" model="acrux.chat.bot.action.type">
+        <field name="name">Create Contact</field>
+        <field name="key">action_create_contact</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <record id="acrux_bot_action_crm" model="acrux.chat.bot.action.type">
+        <field name="name">Create CRM</field>
+        <field name="key">action_create_crm</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="acrux_bot_action_add_note" model="acrux.chat.bot.action.type">
+        <field name="name">Add Note</field>
+        <field name="key">action_add_note</field>
+        <field name="sequence">45</field>
+    </record>
+    <record id="acrux_bot_action_add_reminder" model="acrux.chat.bot.action.type">
+        <field name="name">Add Reminder</field>
+        <field name="key">action_add_reminder</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="acrux_bot_action_ask_docs" model="acrux.chat.bot.action.type">
+        <field name="name">Report documents to AI</field>
+        <field name="key">action_ask_docs</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <!-- chat.bot.model.info -->
+    <record id="acrux_chat_bot_model_info_crm_lead" model="acrux.chat.bot.model.info">
+      <field name="ttype">crm,crm.lead</field>
+      <field name="name">CRM Leads</field>
+    </record>
+
+    <record id="acrux_chat_bot_model_info_sale_order" model="acrux.chat.bot.model.info">
+      <field name="ttype">sale,sale.order</field>
+      <field name="name">Sales Orders</field>
+    </record>
+
+    <record id="acrux_chat_bot_model_info_account_move" model="acrux.chat.bot.model.info">
+      <field name="ttype">account,account.move</field>
+      <field name="name">Invoices</field>
+    </record>
+
+    <record id="acrux_chat_bot_model_info_sale_subscription" model="acrux.chat.bot.model.info">
+      <field name="ttype">sale_subscription,sale.order</field>
+      <field name="name">Subscriptions</field>
+    </record>
+
+    <record id="acrux_chat_bot_model_info_helpdesk_ticket" model="acrux.chat.bot.model.info">
+      <field name="ttype">helpdesk,helpdesk.ticket</field>
+      <field name="name">Helpdesk Tickets</field>
+    </record>
+
+</data>
+</odoo>

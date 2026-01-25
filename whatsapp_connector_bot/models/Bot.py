@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 import random
+import json
 from collections import namedtuple
 from pytz import timezone
 from datetime import datetime
 from odoo import models, fields, api, _, tools
 from odoo.exceptions import ValidationError, UserError
 from odoo.tools import safe_eval
+from odoo.tools.mail import email_re
 from odoo.addons.whatsapp_connector.tools import date2local, get_binary_attach, phone_format
-import logging
-_logger = logging.getLogger(__name__)
 
 FieldsRead = ['id', 'bot_key', 'name', 'parent_id', 'connector_id', 'apply_from',
               'apply_to', 'mute_minutes', 'apply_weekday', 'text_match', 'active',
               'child_ids', 'code', 'body_whatsapp', 'ws_template_id', 'attachment_ids',
-              'is_product', 'bot_res_id', 'product_image_send']
+              'is_product', 'bot_res_id', 'product_image_send',
+              'is_ai', 'ai_connector_id']
 ChatBot = namedtuple('ChatBot', FieldsRead)
 ChatBotM2O = namedtuple('ChatBotM2O', ['id', 'name'])
 
@@ -23,7 +24,7 @@ class AcruxChatBot(models.Model):
     _description = 'ChatBot'
     _parent_name = 'parent_id'
     _rec_name = 'complete_name'
-    _order = 'seq'
+    _order = 'seq, id'
 
     seq = fields.Char('Order', compute='_get_fill_sequence', store=True)
     sequence = fields.Integer('Sequence', default=0)
@@ -49,8 +50,8 @@ class AcruxChatBot(models.Model):
                                   'reply will not be send.')
     apply_weekday = fields.Char('In days', help='Comma separated number, where Monday is 1 and Sunday is 7. '
                                                 'Leave empty for every day.')
-    text_match = fields.Char('Menu Option', help='Applies only if the message equals this value. '
-                                                 'Very useful for analyzing menu options.')
+    text_match = fields.Char('Text Matches', help='Applies only if the message equals this value. '
+                                                  'Very useful for analyzing menu options.')
     body_whatsapp = fields.Text('Message')
     body_whatsapp_html = fields.Html('Html Message', related='ws_template_id.body_html',
                                      readonly=True, store=False, sanitize=False)
@@ -66,9 +67,11 @@ class AcruxChatBot(models.Model):
     product_id = fields.Many2one('product.template', string='Product', ondelete='cascade')
     product_image = fields.Binary(related='product_id.image_1920', store=False)
     product_image_send = fields.Boolean('Send Image?', default=True)
+    reminder_ids = fields.One2many('acrux.chat.bot.reminder', 'bot_id', string='Reminders and Actions', copy=False)
+    count_childs = fields.Integer('Childs #', compute='_compute_count_childs', store=True)
 
     _sql_constraints = [
-        ('complete_name_uniq', 'unique (complete_name)', _('Name has to be unique.'))
+        ('complete_name_uniq', 'unique (complete_name)', 'Name has to be unique.')
     ]
 
     @api.depends('seq', 'name', 'parent_id.complete_name', 'product_id.name', 'sequence', 'text_match')
@@ -79,8 +82,8 @@ class AcruxChatBot(models.Model):
             if rec.product_id.id:
                 name = rec.product_id.name
                 name = name.replace('"', '').replace('\\', '')
-                img = '<img src="/web/image/product.template/%s/image_128" title="%s" alt="%s" class="acrux_m2o_avatar"/>' \
-                      % (rec.product_id.id, name, name)
+                img = '<img src="/web/image/product.template/%s/image_128" ' \
+                      'title="%s" alt="%s" class="acrux_m2o_avatar"/>' % (rec.product_id.id, name, name)
             if rec.text_match:
                 show_name = f'{img} <b class="bot_route_match">{rec.text_match}</b> {rec.name}'
             else:
@@ -115,6 +118,11 @@ class AcruxChatBot(models.Model):
             for childs in rec.child_ids:
                 childs._get_fill_sequence()
 
+    @api.depends('child_ids')
+    def _compute_count_childs(self):
+        for rec in self:
+            rec.count_childs = len(rec.child_ids)
+
     def get_fill_sequence(self, level=10):
         if self.parent_id and level > 0:
             return self.parent_id.get_fill_sequence(level - 1) + '_%s' % str(self.sequence or 0).zfill(3)
@@ -136,7 +144,7 @@ class AcruxChatBot(models.Model):
 
     @api.constrains('parent_id')
     def _check_category_recursion(self):
-        if not self._check_recursion():
+        if self._has_cycle():
             raise ValidationError(_('You cannot create recursive categories.'))
         return True
 
@@ -195,12 +203,13 @@ class AcruxChatBot(models.Model):
             'dateutil': safe_eval.dateutil,
             'timezone': timezone,
             'random_choice': random.choice,
-            'email_re': tools.email_re,
+            'email_re': email_re,
             'UserError': UserError,
             'mess_id': message_id,
             'text': message_id.text,
             'search_partner': message_id.contact_id.search_partner_bot,
-            'ret': []
+            'ret': [],
+            'metadata': json.loads(message_id.metadata_json) if message_id.metadata_json else dict(),
         }
         return eval_context
 
@@ -251,6 +260,50 @@ class AcruxChatBot(models.Model):
                     'contact_id': message_id.contact_id.id,
                     'text': res.get('send_text'),
                 })
+            if res.get('send_button'):
+                text = res['send_button']['text']
+                buttons = res['send_button']['buttons']  # [{'btn_id': '', 'text': ''},]
+                ret.append({
+                    'ttype': 'text',
+                    'from_me': True,
+                    'contact_id': message_id.contact_id.id,
+                    'text': text,
+                    'button_ids': [(0, 0, x) for x in buttons],
+                })
+            if res.get('send_list'):
+                text = res['send_list']['text']
+                title = res['send_list']['title']
+                button_text = res['send_list']['button_text']
+                items = res['send_list']['items']
+                list_data = {
+                    'name': title,
+                    'button_text': button_text,
+                    'items_ids': [(0, 0,
+                                   {'name': x['title'],
+                                    'button_ids': [(0, 0,
+                                                    {'btn_id': y['btn_id'],
+                                                     'ttype': 'replay',
+                                                     'text': y['text'],
+                                                     'description': y.get('description', False),
+                                                     }
+                                                    ) for y in x['buttons']
+                                                   ]
+                                    }
+                                   ) for x in items],
+                }
+                ret.append({
+                    'ttype': 'text',
+                    'from_me': True,
+                    'contact_id': message_id.contact_id.id,
+                    'text': text,
+                    'chat_list_id': self.env['acrux.chat.message.list'].create(list_data).id,
+                })
+            if res.get('log') and message_id.connector_id.bot_log:
+                self.env['acrux.chat.bot.log'].sudo().create({
+                    'conversation_id': message_id.contact_id.id,
+                    'text': message_id.text,
+                    'bot_log': res.get('log'),
+                })
             if res.get('send'):
                 ret.append(res.get('send'))
         return action, ret
@@ -272,18 +325,18 @@ class AcruxChatBot(models.Model):
                     max_seq = max(bot_ids.filtered(lambda x: parent_id == x.parent_id.id).mapped('sequence') or [10])
                     seq = (max_seq + 1) if max_seq else 10
                     vals['sequence'] = seq
-        self.clear_caches()
+        self.env.registry.clear_cache()
         ret = super(AcruxChatBot, self).create(vals_list)
         self.recreate_sequence()
         return ret
 
     def write(self, vals):
-        self.clear_caches()
+        self.env.registry.clear_cache()
         ret = super(AcruxChatBot, self).write(vals)
         return ret
 
     def unlink(self):
-        self.clear_caches()
+        self.env.registry.clear_cache()
         ret = super(AcruxChatBot, self).unlink()
         self.recreate_sequence()
         return ret
@@ -325,41 +378,33 @@ class AcruxChatBot(models.Model):
 
     @api.model
     def _bot_get(self, message_id):
-        _logger.info("SIT _bot_get ==================================================")
+
         log = []
         bot_log = message_id.connector_id.bot_log
 
         def add_log(*args):
             bot_log and log.append(' '.join('%s' % x for x in args))
 
-        BotIds = self.get_bot_obj()
-        _logger.info("SIT _bot_get BotIds=%s",BotIds)
+        BotIds = list(filter(lambda x: x.is_ai is False, self.get_bot_obj()))
 
         def get_bot_by_key(txt):
             return self.get_bot_by(BotIds, 'bot_key', txt)
 
         messages = []
         conv_id = message_id.contact_id
-        _logger.info("SIT _bot_get conv_id=%s",conv_id)
-        
         tz = message_id.connector_id.tz or self.env.context.get('tz') or self.env.user.tz
         Activities = self.env['acrux.chat.conversation.activities'].sudo().with_context(tz=tz)
-        _logger.info("SIT _bot_get Activities=%s",Activities)
         now = fields.Datetime.now()
         has_thread = len(list(filter(lambda x: x.parent_id, BotIds))) > 0
-        _logger.info("SIT _bot_get has_thread=%s",has_thread)
+
         answer_ids = False
         if has_thread:
             data = [('conversation_id', '=', conv_id.id), ('ttype', '=', 'bot_thread')]
             thread_minutes = message_id.connector_id.thread_minutes or 0
-            _logger.info("SIT _bot_get thread_minutes=%s",thread_minutes)
-            
             if thread_minutes > 0:
                 thread_date = fields.Datetime.subtract(now, minutes=int(thread_minutes))
                 data.append(('create_date', '>', thread_date))
             in_thread_ids = Activities.search_read(data, ['rec_id'], limit=1)
-            _logger.info("SIT _bot_get in_thread_ids=%s",in_thread_ids)
-
             if in_thread_ids and in_thread_ids[0]['rec_id'] > 0:
                 bot_id = in_thread_ids[0]['rec_id']
                 answers = list(filter(lambda x: x.active and x.parent_id and x.parent_id.id == bot_id, BotIds))
@@ -368,41 +413,37 @@ class AcruxChatBot(models.Model):
                     add_log('In Bot childs =', answer_ids and answer_ids[0].parent_id.name)
         if not answer_ids:
             answer_ids = list(filter(lambda x: x.active and not x.parent_id, BotIds))
-            _logger.info("SIT _bot_get answer_ids=%s",answer_ids)
             has_thread and add_log('In Bot childs = False')
         add_log('Order =', ' - '.join(x.name for x in answer_ids))
         if answer_ids:
             now_time = date2local(Activities, now)
             now_float = now_time.hour + now_time.minute / 60.0
             weekday = str(now_time.isoweekday())  # monday/lunes == 1
-
             for BotId in answer_ids:
-                _logger.info("SIT _bot_get  BotId.name=%s", BotId.name)
-                _logger.info("SIT _bot_get  message_id=%s", message_id)
-                _logger.info("SIT _bot_get  self.get_bot_hook(BotId, message_id)=%s", self.get_bot_hook(BotId, message_id))
-                _logger.info("SIT _bot_get  BotId.text_match=%s", BotId.text_match)
-                _logger.info("SIT _bot_get  message_id.text=%s", message_id.text)
-                _logger.info("SIT _bot_get  BotId.connector_id=%s", BotId.connector_id)
-                _logger.info("SIT _bot_get  BotId.apply_weekday=%s", BotId.apply_weekday)
-                _logger.info("SIT _bot_get  BotId.apply_from=%s", BotId.apply_from)
-                _logger.info("SIT _bot_get  BotId.apply_to=%s", BotId.apply_to)
-                _logger.info("SIT _bot_get  BotId.mute_minutes=%s", BotId.mute_minutes)
-
                 add_log('=>', BotId.name)
                 if not self.get_bot_hook(BotId, message_id):
                     continue
-                if BotId.text_match and BotId.text_match != message_id.text:
-                    add_log('     < No match =', BotId.text_match)
-                    continue
+                if BotId.text_match:
+                    txt = (message_id.text or '').lower()
+                    if message_id.metadata_type == 'button_replay':
+                        btn = json.loads(message_id.metadata_json) if message_id.metadata_json else dict()
+                        id_btn = btn.get('id')
+                        # check id and text
+                        if BotId.text_match not in [id_btn, txt]:
+                            add_log('     < No match Menu Option (button) =', BotId.text_match)
+                            continue
+                    elif BotId.text_match.lower() != txt:
+                        add_log('     < No match Menu Option (text) =', BotId.text_match)
+                        continue
                 if BotId.connector_id and BotId.connector_id.id != message_id.connector_id.id:
                     add_log('     < No match connector =', BotId.connector_id.name)
                     continue
                 if BotId.apply_weekday and weekday not in BotId.apply_weekday:
                     add_log('     < No match weekday =', weekday, 'not in', BotId.apply_weekday)
                     continue
-                if not((BotId.apply_from == 0.0 and BotId.apply_to == 0.0) or
+                if not ((BotId.apply_from == 0.0 and BotId.apply_to == 0.0) or
                         (BotId.apply_from < now_float < BotId.apply_to)):
-                    add_log('     < No match apply =', BotId.apply_from, '<', now_float, '<', BotId.apply_to)
+                    add_log('     < No match apply (from, to) =', BotId.apply_from, '<', now_float, '<', BotId.apply_to)
                     continue
                 mute_minutes = BotId.mute_minutes
                 if mute_minutes:
@@ -411,16 +452,14 @@ class AcruxChatBot(models.Model):
                                                        ('ttype', '=', 'bot_mute'),
                                                        ('rec_id', '=', BotId.id),
                                                        ('create_date', '>', mute_date)])
-                    _logger.info("SIT _bot_get  creando mute_act=%s",mute_act)
-                    
                     if mute_act:
                         add_log('     < MUTE:', '+ %s minutes' % mute_minutes)
                         continue
-                    _logger.info("SIT _bot_get  creando Activities")
-
                     Activities.create({'conversation_id': conv_id.id,
                                        'ttype': 'bot_mute',
                                        'rec_id': BotId.id})
+                Activities.search([('conversation_id', '=', conv_id.id),
+                                   ('ttype', '=', 'bot_mute_rem')]).unlink()
                 thread_id = False
                 action, messages = self._build_dict(BotId, message_id)
                 add_log('     action =', action)
@@ -469,7 +508,6 @@ class AcruxChatBot(models.Model):
                 'text': message_id.text,
                 'bot_log': '\n'.join(log),
             })
-
         return messages
 
     @api.model
@@ -586,7 +624,7 @@ class AcruxChatBot(models.Model):
         returned_fields = fields_ret + ['attachments']
 
         template_values = self.env['mail.template'].with_context(tpl_partners_only=True).browse(
-            template_id).generate_email([res_id], fields_ret)
+            template_id)._generate_template([res_id], fields_ret)
         res_id_values = dict((field, template_values[res_id][field]) for field in returned_fields
                              if template_values[res_id].get(field))
         res_id_values['body'] = tools.html2plaintext(res_id_values.pop('body_html', '')).strip()

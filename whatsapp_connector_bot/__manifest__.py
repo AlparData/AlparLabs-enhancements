@@ -11,16 +11,18 @@
 # Apoya nuestro trabajo y permite que sigamos mejorando este módulo y el servicio!
 # =====================================================================================
 {
-    'name': 'ChatRoom Real ChatBot professional. Whatsapp - Instagram DM - FaceBook Messenger.',
-    'summary': 'Chat Bot. Automatic messages for product and text. Templates and Python code. WhatsApp ChatBot integration. ChatBot WhatsApp bot apichat.io GupShup Chat-Api ChatApi. ChatRoom 2.0.',
-    'description': 'BOT WhatsApp Automatic messages for product and free text. Templates and Python code. WhatsApp ChatBot integration. ChatBot WhatsApp bot ChatRoom 2.0.',
-    'version': '18.0',
+    'name': 'ChatRoom AI ChatBot. ChatGPT, OpenAI, GEMINI. Whatsapp, Instagram DM, FaceBook Messenger.',
+    'summary': 'Artificial Intelligence Chat AI Assistant. Automatic messages with AI. Templates and Python code. '
+               'WhatsApp IA ChatBot integration. ChatBot WhatsApp bot apichat.io AI Chat IA. AI Bot IA. ChatRoom 2.0.',
+    'description': 'BOT WhatsApp with Artificial Intelligence Chat AI Assistant. Templates and Python code. '
+                   'WhatsApp ChatBot integration. ChatBot WhatsApp bot ChatRoom 2.0.',
+    'version': '18.0.29.0',
     'author': 'AcruxLab',
     'live_test_url': 'https://acruxlab.com/plans',
     'support': 'info@acruxlab.com',
     'price': 149.0,
     'currency': 'USD',
-    'images': ['static/description/Banner_bot_v10.gif'],
+    'images': ['static/description/Banner_bot_v11.png'],
     'website': 'https://acruxlab.com/whatsapp',
     'license': 'OPL-1',
     'application': True,
@@ -28,21 +30,27 @@
     'category': 'Discuss',
     'depends': [
         'whatsapp_connector',
-        'product',
     ],
     'data': [
         'security/ir.model.access.csv',
         'data/cron.xml',
+        'data/data.xml',
         'wizard/product_import.xml',
         'views/bot_log_views.xml',
         'views/bot_views.xml',
         'views/connector_views.xml',
+        'views/conversation_views.xml',
+        'views/bot_ai_views.xml',
+        'views/bot_ai_connector_views.xml',
+        'views/bot_ai_message_views.xml',
         'views/menu.xml',
         'views/res_config_settings_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
-            '/whatsapp_connector_bot/static/src/css/chat_bot.css',
+            'whatsapp_connector_bot/static/src/css/chat_bot.css',
+            'whatsapp_connector_bot/static/src/components/*/*.xml',
+            'whatsapp_connector_bot/static/jslib/chatroom.js',
         ],
     },
     'post_load': '',

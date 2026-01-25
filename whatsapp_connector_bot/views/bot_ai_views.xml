@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- chat.bot.action.ai.form -->
+    <record model="ir.ui.view" id="whatsapp_connector_bot_action_form">
+        <field name="name">acrux.chat.bot.action.ai.form</field>
+        <field name="model">acrux.chat.bot.action</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" />
+                    <field name="action_type_id" options="{'no_create': True, 'no_create_edit': True}" />
+                    <field name="action_bot_id" options="{'no_create': True}"
+                           invisible="action_type_id_key != 'action_to_switch_bot'" />
+                    <field name="parameters"
+                           invisible="action_type_id_key not in ['action_add_reminder', 'action_create_crm', 'action_create_contact']"/>
+                    <field name="sequence" invisible="1" />  <!-- invisible: widget -->
+                    <field name="option" invisible="1" />  <!-- invisible: ignore -->
+                    <field name="model" invisible="1" />  <!-- invisible: ignore -->
+                    <field name="bot_id" invisible="1" />  <!-- invisible: ignore -->
+                    <field name="action_type_id_key" invisible="1" />  <!-- invisible: ignore -->
+                </group>
+           </form>
+        </field>
+    </record>
+
+     <!-- chat.bot AI -->
+    <record model="ir.ui.view" id="whatsapp_connector_bot_ai_tree">
+        <field name="name">acrux.chat.bot.ai.tree</field>
+        <field name="model">acrux.chat.bot</field>
+        <field name="arch" type="xml">
+            <list class="chat_bot_tree">
+                <field name="seq" column_invisible="1" />  <!-- invisible: ignore -->
+                <field name="sequence" widget="handle" />
+                <field name="ai_bot_type" />
+                <field name="name" />
+                <field name="is_ai" column_invisible="1" />  <!-- invisible: ignore -->
+                <field name="connector_id" widget="selection" optional="hide" />
+                <field name="active" widget="boolean_toggle" readonly="ai_bot_type == 'state'" />
+                <field name="complete_name" column_invisible="1" force_save="1" />  <!-- invisible: ignore -->
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="whatsapp_connector_bot_ai_form">
+        <field name="name">acrux.chat.bot.ai.form</field>
+        <field name="model">acrux.chat.bot</field>
+        <field name="arch" type="xml">
+            <form js_class="bot_ai_form">
+                <header invisible="ai_bot_type != 'bot'">
+                    <button name="prompt_save" string="Save config" icon="fa-cloud-upload" type="object"
+                            class="oe_highlight" />
+                    <button name="prompt_delete" string="Delete config" icon="fa-trash" type="object" />
+                </header>
+                <sheet class="acrux_clean_sheet">
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                        invisible="active" />
+                    <field name="external_status" invisible="1" />  <!-- invisible: ignore -->
+                    <widget name="web_ribbon" title="Updated" bg_color="text-bg-success"
+                        invisible="(not active and external_status != 'updated') or ai_bot_type == 'state'" />
+                    <widget name="web_ribbon" title="Outdated" bg_color="text-bg-danger"
+                        invisible="external_status == 'updated' or ai_bot_type == 'state'" />
+                    <group>
+                        <group>
+                            <div class="w-100" colspan="2">
+                                <field name="id" invisible="1" />  <!-- invisible: ignore -->
+                                <field name="sequence" invisible="1" />  <!-- invisible: ignore -->
+                                <field name="ai_bot_type" invisible="1" />  <!-- invisible: ignore -->
+                                <field name="complete_name" invisible="1" />  <!-- invisible: ignore -->
+                                <h1>
+                                    <field name="name" default_focus="1" placeholder="Reference" nolabel="1"
+                                           readonly="ai_bot_type == 'state'"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <group col="1" colspan="2" invisible="ai_bot_type == 'state'">
+                                <group>
+                                    <field name="active" widget="boolean_toggle" />
+                                </group>
+                                <group>
+                                    <group class="w-50">
+                                        <field name="ai_connector_id" required="ai_bot_type != 'state'" options="{'no_create': True, 'no_open': True}" />
+                                        <field name="color" widget="color_picker" />
+                                        <field name="is_ai" widget="boolean_toggle" invisible="1" />  <!-- invisible: ignore -->
+                                        <field name="external_id" invisible="1" />  <!-- invisible: ignore -->
+                                    </group>
+                                </group>
+                            </group>
+                        </group>
+                    </group>
+                    <notebook class="mt-4" invisible="ai_bot_type == 'state'">
+                        <page string="When to use this BOT" name="ai_when">
+                            <group class="mt-4 mb-2 mx-4">
+                                <group string="Apply if" class="acrux_bot bot_bg_color_red">
+                                    <group>
+                                        <field name="connector_id" widget="selection" />
+                                        <field name="text_match" string="Text Matches"/>
+                                    </group>
+                                    <group>
+                                        <field name="apply_from" widget="float_time" />
+                                        <field name="apply_to" widget="float_time" />
+                                        <field name="apply_weekday" />
+                                    </group>
+                                </group>
+                                <group col="1">
+                                    <div class="mt-2 ms-4 text-muted text-nowrap">
+                                        <i>
+                                            <b>Use this BOT or analyze the next one?</b>
+                                            <br />
+                                            <br />
+                                            <ul>
+                                                <li>In this section you can configure whether this BOT<br /> is processed or should be continued with the next BOT.</li>
+                                                <li>Leaving empty or default values means that this BOT <br /> will be executed and not continue to the next one.</li>
+                                            </ul>
+                                        </i>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Information" name="ai_info">
+                            <group class="mt-5 pb-3 ps-4 me-2">
+                                <group>
+                                    <field name="ai_agent_name" />
+                                    <field name="model_info_ids" widget="many2many_tags" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="ai_send_contact" />
+                                </group>
+                            </group>
+                            <group class="mt-4 pb-4 mx-4">
+                                <group string="My Company" class="acrux_bot bot_bg_color_green">
+                                    <group col="1" colspan="2">
+                                        <group>
+                                            <field name="ai_company_name" class="w-50" />
+                                        </group>
+                                        <group>
+                                            <field name="ai_company_info" required="ai_bot_type != 'state'"/>
+                                        </group>
+                                    </group>
+                                </group>
+                                <group>
+                                    <div class="d-flex justify-content-between mt-2" colspan="2">
+                                        <label for="ai_company_prompt" string="AI final text" />
+                                        <div class="d-flex">
+                                            <button name="copy_original_definition" string="Copy Original"
+                                                    context="{'ai_type': 'company'}"
+                                                    icon="fa-copy" class="btn btn-sm btn-outline-primary me-2" type="object" />
+                                            <button name="optimize_ai" string="Optimize with AI"
+                                                    context="{'ai_type': 'company'}"
+                                                    icon="fa-cog" class="btn btn-sm btn-primary" type="object" />
+                                        </div>
+                                    </div>
+                                    <field name="ai_company_prompt" nolabel="1" colspan="2" />
+                                </group>
+                            </group>
+
+                            <group class="mt-4 pb-4 mx-4">
+                                <group string="Description of what you offer" class="acrux_bot bot_bg_color_blue">
+                                    <group colspan="2">
+                                        <field name="ai_service_info" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <div class="d-flex justify-content-between mt-2" colspan="2">
+                                        <label for="ai_service_prompt" string="AI final text" />
+                                        <div class="d-flex">
+                                            <button name="copy_original_definition" string="Copy Original"
+                                                    context="{'ai_type': 'service'}"
+                                                    icon="fa-copy" class="btn btn-sm btn-outline-primary me-2" type="object" />
+                                            <button name="optimize_ai" string="Optimize with AI"
+                                                    context="{'ai_type': 'service'}"
+                                                    icon="fa-cog" class="btn btn-sm btn-primary" type="object" />
+                                        </div>
+                                    </div>
+                                    <field name="ai_service_prompt" nolabel="1" colspan="2" />
+                                </group>
+                            </group>
+
+                            <group class="mt-4 pb-4 mx-4">
+                                <group string="List of Categories, Products or Services" class="acrux_bot bot_bg_color_green">
+                                    <group colspan="2">
+                                        <field name="ai_products_info" widget="text"
+                                               placeholder="Format of the products: Name | Price | Link&#10;&#10;Category 1: Apichat Plans&#10;- Plan 60 | $9 | acruxlab.com/shop/4&#10;- Plan 200 | $19 | acruxlab.com/shop/18"
+                                        />
+                                    </group>
+                                </group>
+                                <group>
+                                    <div class="d-flex justify-content-between mt-2" colspan="2">
+                                        <label for="ai_products_prompt" string="AI final text" />
+                                        <div class="d-flex">
+                                            <button name="copy_original_definition" string="Copy Original"
+                                                    context="{'ai_type': 'products'}"
+                                                    icon="fa-copy" class="btn btn-sm btn-outline-primary me-2" type="object" />
+                                            <button name="optimize_ai" string="Optimize with AI"
+                                                    context="{'ai_type': 'products'}"
+                                                    icon="fa-cog" class="btn btn-sm btn-primary" type="object" />
+                                        </div>
+                                    </div>
+                                    <field name="ai_products_prompt" nolabel="1" colspan="2" />
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Style &amp; Objective" name="ai_style">
+                            <group class="mt-4 pb-4 mx-4">
+                                <group string="Style" class="acrux_bot bot_bg_color_green">
+                                    <group colspan="2">
+                                        <field name="ai_style_info" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <div class="d-flex justify-content-between mt-2" colspan="2">
+                                        <label for="ai_style_prompt" string="AI final text" />
+                                        <div class="d-flex">
+                                            <button name="copy_original_definition" string="Copy Original"
+                                                    context="{'ai_type': 'style'}"
+                                                    icon="fa-copy" class="btn btn-sm btn-outline-primary me-2" type="object" />
+                                            <button name="optimize_ai" string="Optimize with AI"
+                                                    context="{'ai_type': 'style'}"
+                                                    icon="fa-cog" class="btn btn-sm btn-primary" type="object" />
+                                        </div>
+                                    </div>
+                                    <field name="ai_style_prompt" nolabel="1" colspan="2" />
+                                </group>
+                            </group>
+
+                            <group class="mt-4 pb-4 mx-4">
+                                <group string="Objective" class="acrux_bot bot_bg_color_blue">
+                                    <group colspan="2">
+                                        <field name="ai_objective_info" />
+                                    </group>
+                                </group>
+                                <group>
+                                    <div class="d-flex justify-content-between mt-2" colspan="2">
+                                        <label for="ai_objective_prompt" string="AI final text" />
+                                        <div class="d-flex">
+                                            <button name="copy_original_definition" string="Copy Original"
+                                                    context="{'ai_type': 'objective'}"
+                                                    icon="fa-copy" class="btn btn-sm btn-outline-primary me-2" type="object" />
+                                            <button name="optimize_ai" string="Optimize with AI"
+                                                    context="{'ai_type': 'objective'}"
+                                                    icon="fa-cog" class="btn btn-sm btn-primary" type="object" />
+                                        </div>
+                                    </div>
+                                    <field name="ai_objective_prompt" nolabel="1" colspan="2" />
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Steps to Follow &amp; Actions" name="ai_actions">
+                            <group class="mt-4 mb-2 mx-2" col="3">
+                                <group colspan="2" class="ps-0">
+                                    <label for="ai_steps_to_follow_prompt" class="text-nowrap"/>
+                                    <field name="ai_steps_to_follow_prompt" colspan="2" nolabel="1" />
+                                </group>
+                                <group col="1">
+                                    <div class="mt-4 ms-4 text-muted text-nowrap">
+                                        <i>
+                                            <ul>
+                                                <li>If your BOT must follow steps or a defined order,<br /> set up a list describing each step.</li>
+                                                <li>You can also indicate whether each step is mandatory.</li>
+                                            </ul>
+                                        </i>
+                                    </div>
+                                </group>
+                            </group>
+                            <group class="mt-5 mb-2 mx-2" col="3">
+                                <group colspan="2" class="ps-0">
+                                    <field name="action_ids" colspan="2" mode="list" nolabel="1"
+                                           widget="one2many" options="{'create_edit': true}">
+                                        <list limit="8">
+                                            <field name="sequence" widget="handle" />
+                                            <field name="name" />
+                                            <field name="action_type_id" />
+                                            <field name="option" />
+                                        </list>
+                                    </field>
+                                </group>
+                                <group col="1">
+                                    <div class="mt-4 ms-4 text-muted text-nowrap">
+                                        <i>
+                                            <ul>
+                                                <li><b>When Activate the Action?</b><br /> Explain when the action should be performed.</li>
+                                                <li><b>Action</b><br /> Select an action.</li>
+                                                <li><b>Bot</b><br /> If the Action is "Switch to Another Bot"<br /> then you must select the BOT.</li>
+                                                <li><b>Parameters</b><br /> Technical name of the fields that are written,<br />for example, when creating a CRM Opportunity:<br />
+- name: Full name (e.g., John Doe).<br />- email_from: Valid email (e.g., john@example.com).<br />- team_id: 'Sales'</li>
+                                            </ul>
+                                        </i>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Predefined Messages" name="ai_predefined_messages">
+                                <group colspan="2" class="mt-4">
+                                    <field name="ai_predefined_ids" colspan="2" mode="list" nolabel="1">
+                                        <list editable="bottom" limit="24">
+                                            <field name="sequence" widget="handle" />
+                                            <field name="name" />
+                                            <field name="message" />
+                                            <field name="bot_id" column_invisible="1" />  <!-- invisible: ignore -->
+                                        </list>
+                                    </field>
+                                </group>
+                                <group colspan="2">
+                                    <div class="mt-4 ms-4 text-muted text-nowrap">
+                                        <i><b>When to use?</b></i><br/><br/>
+                                        <ul>
+<li>Use in cases where you want to restrict the AI's freedom to generate a message.</li>
+<li>When the AI detects that it must meet the Purpose described,
+it will take this message as a template to generate the response.</li>
+<li>The AI will be able to adapt the message based on the context of the conversation.</li>
+                                        </ul>
+                                    </div>
+                                </group>
+                                <group colspan="2">
+                                    <div class="mt-4 ms-4 text-muted text-nowrap">
+                                        <i><b>Examples:</b></i><br/><br/>
+                                        <ul>
+<li><b>Purpose:</b>
+Greeting a new user</li>
+<li><b>Message:</b><br/>
+Hello [user_name]! Welcome to [company_name]. How can I assist you today?<br/>
+Do you need Support or Information about our Plans?</li>
+                                        </ul>
+                                        <ul>
+<li><b>Purpose:</b>
+View documents in User Panel</li>
+<li><b>Message:</b><br/>
+You can see your [document_type] in your User Panel at [store_website]/my/home</li>
+                                        </ul>
+                                        <ul>
+<li><b>Purpose:</b>
+Handling an unclear request</li>
+<li><b>Message:</b><br/>
+I'm sorry, but I didn't understand your request. Could you please provide more details or rephrase it?</li>
+                                        </ul>
+                                        <ul>
+<li><b>Purpose:</b>
+Transfer to human</li>
+<li><b>Message:</b><br/>
+We will transfer your case to a human assistant so they can help you in more detail.</li>
+                                        </ul>
+                                    </div>
+                                </group>
+                        </page>
+                        
+                        <page string="Test" name="ai_test">
+                            <group>
+                                <field name="test_contact_id"
+                                       context="{'form_view_ref': 'whatsapp_connector.view_whatsapp_connector_conversation_form_admin'}"/>
+                                <div class=" w-100 d-flex" colspan="2">
+                                    <button name="ai_test_clean" type="object" string="Clean 1+1 mess." class="btn-primary me-2 text-nowrap"
+                                            context="{'turns_to_del': 1}" icon="fa-undo" />
+                                    <button name="ai_test_clean" type="object" string="Delete Docs." class="btn-primary me-2 text-nowrap"
+                                            context="{'clean_docs': True}" icon="fa-eraser" />
+                                    <button name="ai_test_clean" type="object" string="Delete Partner" class="btn-primary me-2 text-nowrap"
+                                            context="{'clean_partner': True}" icon="fa-eraser" />
+                                </div>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="whatsapp_connector_bot_ai_action">
+        <field name="name">AI ChatBot</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">acrux.chat.bot</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('whatsapp_connector_bot_ai_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('whatsapp_connector_bot_ai_form')})]" />
+        <field name="context">{'search_default_all': 1, 'default_is_ai': True}</field>
+        <field name="domain">[('is_ai', '=', True)]</field>
+    </record>
+
+</odoo>

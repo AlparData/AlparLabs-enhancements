@@ -11,7 +11,7 @@
 # Apoya nuestro trabajo y permite que sigamos mejorando este módulo y el servicio!
 # =====================================================================================
 import csv
-from odoo import models, tools
+from odoo import models, fields, tools
 
 
 class ResConfigSettings(models.TransientModel):
@@ -21,10 +21,9 @@ class ResConfigSettings(models.TransientModel):
     def import_demo_chatbot(self):
         Bot = self.env['acrux.chat.bot']
         with tools.file_open("whatsapp_connector_bot/data/demo.chat.bot.csv", "r") as csv_file:
-            sequence = 99
             for row in csv.DictReader(csv_file):
                 vals = {
-                    'sequence': sequence,
+                    'sequence': row['Sequence'] or False,
                     'bot_key': row['Bot Key'] or False,
                     'name': row['Name'] or False,
                     'code': row['Action'] or False,
@@ -34,9 +33,9 @@ class ResConfigSettings(models.TransientModel):
                     'mute_minutes': int(float(row['Mute (Minutes)'] or 0)),
                     # 'apply_weekday': row['In days'] or False,
                     'text_match': row['Menu Option'] or False,
+                    'body_whatsapp': row['Message'] or False,
                 }
                 self.env['acrux.chat.bot'].create(vals)
                 self.env.cr.commit()
-                sequence += 1
             self.env['acrux.chat.bot'].recreate_sequence()
         return self.env['acrux.chat.pop.message'].message('Ok', 'Go to <b>ChatBot</b> menu.')

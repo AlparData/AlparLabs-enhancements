@@ -16,7 +16,7 @@
                             <div class="text-muted">
                                 View all ChatBot's
                             </div>
-                            <div class="mb16">
+                            <div class="mb32">
                                 <button name="%(whatsapp_connector_bot.whatsapp_connector_bot_action)d" icon="fa-arrow-right"
                                         string="View ChatBot's" class="btn-link" type="action"/>
                             </div>
@@ -24,7 +24,7 @@
                             <div class="text-muted">
                                 Debugging and tracking to create your ChatBot.
                             </div>
-                            <div class="mb16">
+                            <div class="mb32">
                                 <button name="%(whatsapp_connector_bot.whatsapp_connector_bot_log_action)d" icon="fa-arrow-right"
                                         string="View ChatBot Logs" class="btn-link" type="action"/>
                             </div>
@@ -32,7 +32,7 @@
                             <div class="text-muted mb8">
                                 Advanced usage examples.
                             </div>
-                            <div class="mb16">
+                            <div class="mb32">
                                 <button name="import_demo_chatbot" type="object" string="Create"
                                         class="btn-primary" icon="fa-cog"/>
                             </div>

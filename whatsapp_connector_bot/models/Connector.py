@@ -9,3 +9,4 @@ class Connector(models.Model):
     thread_minutes = fields.Integer('Exit Childs (Minutes)', default=60,
                                     help='Minutes to stay in childs without activity. '
                                          'After this time, it returns to root.')
+    use_ai = fields.Boolean('Use AI', help='Using AI Schema and rules.')

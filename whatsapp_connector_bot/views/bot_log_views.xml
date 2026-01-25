@@ -14,7 +14,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="whatsapp_connector_bot_log_list">
+    <record model="ir.ui.view" id="whatsapp_connector_bot_log_tree">
         <field name="name">acrux.chat.bot.log.list</field>
         <field name="model">acrux.chat.bot.log</field>
         <field name="arch" type="xml">

@@ -10,7 +10,8 @@
                 <page string="ChatBot">
                     <group colspan="2">
                         <group>
-                            <field name="thread_minutes"/>
+                            <field name="use_ai" widget="boolean_toggle"/>
+                            <field name="thread_minutes" invisible="use_ai == True"/>
                             <field name="bot_log" widget="boolean_toggle"/>
                         </group>
                     </group>
