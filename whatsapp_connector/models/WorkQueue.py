@@ -23,6 +23,7 @@ class ChatWorkQueue(models.Model):
     connector_id = fields.Many2one('acrux.chat.connector', 'Connector', required=True,
                                    ondelete='cascade')
     res_id = fields.Integer('Resource ID for model')
+    number = fields.Char('Number', index=True)
     ttype = fields.Selection([('delete_me', 'To Delete'),
                               ('error', 'Error'),
                               ('processing', 'Processing'),

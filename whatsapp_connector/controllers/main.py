@@ -82,21 +82,24 @@ class WebhookController(http.Controller):
                 WorkQueue.create({
                     'ttype': 'in_update',
                     'connector_id': connector_id.id,
-                    'data': json.dumps(contact)
+                    'data': json.dumps(contact),
+                    'number': contact.get('number')
                 })
 
             for event in events:
                 WorkQueue.create({
                     'ttype': 'in_event',
                     'connector_id': connector_id.id,
-                    'data': json.dumps(event)
+                    'data': json.dumps(event),
+                    'number': event.get('number')
                 })
 
             for mess in messages:
                 WorkQueue.create({
                     'ttype': 'in_message',
                     'connector_id': connector_id.id,
-                    'data': json.dumps(mess)
+                    'data': json.dumps(mess),
+                    'number': mess.get('number')
                 })
             return {'status': 'ok'}
         except (TransactionRollbackError, OperationalError, QWebException) as e:
