@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_inherit_delegate_connector" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.delegate.connector</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='preferences']//group[@name='preferences']" position="inside">
+                <group string="ChatRoom Delegation" name="chatroom_delegation">
+                    <field name="default_connector_id" options="{'no_create': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
