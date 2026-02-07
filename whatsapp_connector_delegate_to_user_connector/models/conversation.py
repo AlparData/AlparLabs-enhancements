@@ -123,8 +123,9 @@ class Conversation(models.Model):
         else:
              notifications.append((self.get_channel_to_many(), 'new_messages', data_target))
              
-        # Also notify specific agent channel if needed, as per original delegate_conversation
-        # Original: notifications.append((self.get_channel_to_one(), 'update_conversation', data))
+        # FORCE update to specific agent channel to ensure it appears
+        target_conv.with_user(self.tmp_agent_id).env.user
+        notifications.append((target_conv.get_channel_to_one(), 'update_conversation', data_target))
         
         self._sendmany(notifications)
 
