@@ -71,8 +71,7 @@ class Conversation(models.Model):
         self._link_conversations(target_conv)
         
         # Assign agent to target conversation and set to current
-        target_conv.agent_id = self.tmp_agent_id
-        target_conv.set_to_current()
+        target_conv.with_user(self.tmp_agent_id).set_to_current()
         
         # Notification to target agent
         if target_connector.notify_discuss:
