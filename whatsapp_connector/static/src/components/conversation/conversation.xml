@@ -19,10 +19,10 @@
                     <strong class="o_kanban_record_title text-truncate text-900" t-attf-title="{{props.conversation.name}}">
                         <t t-esc="props.conversation.name" />
                     </strong>
-                    <div class="ms-2 d-flex align-items-center">
-                        <span class="badge rounded-pill text-bg-primary" t-if="props.conversation.countNewMsg">
+                    <div class="ms-2 d-flex align-items-center o_ChatTools">
+                        <a href="#" class="badge rounded-pill text-bg-primary o_number_new_msg" t-if="props.conversation.countNewMsg">
                             <t t-esc="props.conversation.countNewMsg" />
-                        </span>
+                        </a>
                         <button class="btn btn-link text-muted p-0 ms-2 acrux_close_conv" t-if="!props.conversation.isCurrent() and !props.hideClose"
                             t-on-click="onClose">
                             <i class="oi oi-close small" />
