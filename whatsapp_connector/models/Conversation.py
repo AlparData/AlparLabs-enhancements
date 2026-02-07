@@ -815,6 +815,7 @@ class AcruxChatConversation(models.Model):
         if back_status != 'current':
             self._sendone(self.get_channel_to_many(), 'update_conversation', data_to_send)
         self._sendone(self.get_channel_to_one(self.env.user), 'init_conversation', data_to_send)
+        return data_to_send
 
     @api.model
     def conversation_create(self, partner_id, connector_id, number):
