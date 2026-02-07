@@ -919,7 +919,8 @@ this.state.selectedConversation=conv
 if(this.myController){this.myController.props.selectedConversationId=conv?conv.id:undefined}
 if(conv){await conv.selected()
 this.env.chatBus.trigger('mobileNavigate','middleSide')}}
-notifactionSubscriber(){const out={new_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onNewMessage(m))}},init_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onInitConversation(m))}},change_status:(payload)=>{payload.map(m=>this.onChangeStatus(m))},update_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onUpdateConversation(m))}},error_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onErrorMessages(m))}}}
+notifactionSubscriber(){const out={new_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onNewMessage(m))}},init_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onInitConversation(m))}},change_status:(payload)=>{payload.map(m=>this.onChangeStatus(m))},update_conversation:(payload)=>{if(this.state.user.status){payload.forEach(m=>{const conv=this.state.conversations.find(x=>x.id===m.id)
+if(conv){conv.updateFromJson(m)}else{this.onUpdateConversation(m)}})}},error_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onErrorMessages(m))}}}
 Object.entries(out).forEach(([key,value])=>{this.env.services.bus_service.subscribe(key,value)})
 return out}
 async onNewMessage(convData){const{desk_notify,messages}=convData

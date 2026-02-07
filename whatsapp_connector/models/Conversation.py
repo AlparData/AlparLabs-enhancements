@@ -931,6 +931,18 @@ class AcruxChatConversation(models.Model):
         elif ttype == 'deleted':
             self.new_message_event(connector_id, event['msgid'], event)
 
+    def _send_transfer_notification(self, user_id):
+        self.ensure_one()
+        Message = self.env['acrux.chat.message']
+        text = _('Conversation transferred to %s') % user_id.name
+        Message.create({
+            'ttype': 'info',
+            'from_me': True,
+            'contact_id': self.id,
+            'text': text,
+            'user_id': self.env.user.id,
+        })
+
     @api.model
     def check_object_reference(self, postfix, view):
         return self.sudo().env['ir.model.data'].check_object_reference('whatsapp_connector%s' % (postfix or ''), view)
@@ -940,6 +952,7 @@ class AcruxChatConversation(models.Model):
         if self.status != 'new':
             self.with_context(ignore_agent_id=True).set_to_new()
         if self.tmp_agent_id:
+            self._send_transfer_notification(self.tmp_agent_id)
             if self.connector_id.notify_discuss:
                 self.notify_discuss_to_user(self.tmp_agent_id, 'I delegated a Chat to you.')
             self.with_user(self.tmp_agent_id).set_to_current()
