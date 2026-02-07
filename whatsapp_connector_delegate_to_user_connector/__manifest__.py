@@ -4,7 +4,7 @@
     'summary': 'Delegate conversation to the agent\'s default connector.',
     'description': 'Extends the delegation functionality to allow conversations to be delegated to different connectors based on the assigned agent\'s default connector.',
     'version': '18.0.1.0',
-    'author': 'Antigravity',
+    'author': 'AlparData',
     'category': 'Discuss/Sales/CRM',
     'depends': [
         'whatsapp_connector',
