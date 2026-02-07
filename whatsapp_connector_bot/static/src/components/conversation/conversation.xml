@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
     <t t-name="chatroom.Conversation" t-inherit="chatroom.Conversation" t-inherit-mode="extension" owl="1">
-        <xpath expr="//div[hasclass('acrux_chat_conversation_tools')]/span[hasclass('o_number_new_msg')]" position="before">
+        <xpath expr="//div[hasclass('o_ChatTools')]/a[hasclass('o_number_new_msg')]" position="before">
             <i class="fa fa-android me-1 fa-lg"
                 t-if="props.conversation.bot?.id and props.bots and props.bots[props.conversation.bot.id]"
                 t-attf-style="{{
