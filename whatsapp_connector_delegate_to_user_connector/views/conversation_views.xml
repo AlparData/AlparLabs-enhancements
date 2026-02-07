@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_connector_conversation_form_inherit_delegate" model="ir.ui.view">
+        <field name="name">acrux.chat.conversation.form.inherit.delegate</field>
+        <field name="model">acrux.chat.conversation</field>
+        <field name="inherit_id" ref="whatsapp_connector.view_whatsapp_connector_conversation_chatroom_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='tmp_agent_id']" position="after">
+                <field name="delegation_target_connector_id" invisible="1"/>
+                <div class="text-info small" invisible="not delegation_target_connector_id or delegation_target_connector_id == connector_id">
+                    <i class="fa fa-info-circle"/> Will transfer to connector: <field name="delegation_target_connector_id" options="{'no_open': True}" readonly="1" class="oe_inline"/>
+                </div>
+            </xpath>
+            <xpath expr="//button[@name='delegate_conversation']" position="after">
+                <button name="transfer_conversation" type="object" string="Transfer"
+                        class="btn-primary mx-0 pe-0" 
+                        invisible="not delegation_target_connector_id or delegation_target_connector_id == connector_id"
+                        confirm="Are you sure you want to transfer this conversation to a different connector? The current conversation will be closed."
+                        help="Transfer conversation to the selected agent's default connector."/>
+            </xpath>
+            <xpath expr="//button[@name='delegate_conversation']" position="attributes">
+                <attribute name="invisible">delegation_target_connector_id and delegation_target_connector_id != connector_id</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
