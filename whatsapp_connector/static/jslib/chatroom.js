@@ -850,8 +850,7 @@ async setServerConversation(){const convIds=await this.env.services.orm.call(thi
 let data=await Promise.all(convIds.map(convId=>this.env.conversationBuildDict(convId,0,0)))
 await this.upsertConversation(data.filter(item=>item.length).map(item=>item[0]))
 this.state.conversations.forEach(conv=>{conv.ready=false})
-this.state.conversations.filter(conv=>conv.status==='current').map(msg=>msg.syncMoreMessage({forceSync:true}))
-this.state.conversations.filter(conv=>conv.status!=='current').map(msg=>msg.syncMoreMessage({forceSync:true}))
+
 if(this.props.selectedConversationId){const conv=this.state.conversations.find(conv=>conv.id===this.props.selectedConversationId)
 if(conv){this.selectConversation({detail:{conv}})}else{this.selectConversation({detail:{conv:null}})}}else{this.selectConversation({detail:{conv:null}})}}
 async getCurrency(){const{orm}=this.env.services
@@ -1198,8 +1197,14 @@ this.state.chatFilterResponse=[]
 this.state.chatsFiltered=[]
 this.filterAndOrderConversations()}
 closeChatFilter(){this.state.isChatFiltering=false}
-async initAndNotify({detail:{id}}){this.state.isChatFiltering=false
-return this.env.services.orm.call(this.env.chatModel,'init_and_notify',[[id]],{context:this.env.context},)}
+    async initAndNotify({ detail: { id } }) {
+        this.state.isChatFiltering = false
+        const data = await this.env.services.orm.call(this.env.chatModel, 'init_and_notify', [[id]], { context: this.env.context })
+        if (data) {
+            this.env.services.bus_service.trigger('notification', [{ type: 'init_conversation', payload: data }])
+        }
+        return data
+    }
 async createConversation(){const action={type:'ir.actions.act_window',name:_t('Create'),view_type:'form',view_mode:'form',res_model:this.env.chatModel,views:[[false,'form']],target:'new',context:{...this.env.context,chat_full_edit:true,default_is_odoo_created:true},}
 const onSave=async record=>{if(record?.resId){await Promise.all([this.env.services.action.doAction({type:'ir.actions.act_window_close'}),Promise.resolve().then(()=>this.env.chatBus.trigger('initAndNotifyConversation',{id:record.resId})),Promise.resolve().then(()=>this.env.chatBus.trigger('closeChatFilter')),])}}
 await this.env.services.action.doAction(action,{props:{onSave}})}

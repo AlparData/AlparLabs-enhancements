@@ -384,45 +384,37 @@
                 <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'
                     help="This bar allows to filter the chats based on scheduled activities." />
                 <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click"
-                             t-attf-style="#{record.border_color.value == '#FFFFFF'? '': 'background-color: ' + record.border_color.value + '10; border-color: ' + record.border_color.value + '40;'}">
-                            <div class="oe_kanban_content">
-                                <div class="o_kanban_record_title d-flex justify-content-between">
-                                    <div class="mb-1">
-                                        <div class="o_acrux_social" t-if="record.show_icon.raw_value">
-                                            <div t-attf-class="acrux_#{record.connector_type.raw_value == 'facebook' ? 'facebook': record.connector_type.raw_value == 'instagram' ? 'instagram' : 'whatsapp'}"
-                                                 t-att-title="record.connector_id.value"></div>
+                    <t t-name="card">
+                        <div t-attf-class="o_kanban_record_has_image_fill oe_kanban_global_click"
+                             t-attf-style="#{record.border_color.value == '#FFFFFF'? '': 'border-left: 5px solid ' + record.border_color.value + ';'}">
+                            <div class="d-flex w-100">
+                                <div class="me-2" t-if="record.image_url.value">
+                                    <img t-att-src="record.image_url.value" class="rounded-circle" style="width: 48px; height: 48px; object-fit: cover;" alt="Avatar"/>
+                                     <div class="position-absolute" style="bottom: 0px; right: 0px;" t-if="record.show_icon.raw_value">
+                                        <div t-attf-class="acrux_#{record.connector_type.raw_value == 'facebook' ? 'facebook': record.connector_type.raw_value == 'instagram' ? 'instagram' : 'whatsapp'}"
+                                             t-att-title="record.connector_id.value" style="width: 16px; height: 16px;"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                        <div class="d-flex align-items-center">
+                                            <field name="activity_ids" widget="kanban_activity"/>
                                         </div>
-                                        <field name="name" />
                                     </div>
-                                    <div class="text-400 small" t-if="record.agent_id.value">
-                                        <field name="agent_id" widget="many2one_avatar_user" style="vertical-align: middle;" />
+                                    <div class="text-muted small" t-if="record.agent_id.value">
+                                        <field name="agent_id" widget="many2one_avatar_user"/>
                                     </div>
-                                </div>
-                                <div class="d-flex">
-                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
-                                        class="text-nowrap d-flex me-1" />
-                                    <span class="acrux_conversation_note text-600" style="margin-bottom: var(--KanbanRecord-gap-v);"
-                                        t-esc="record.note.value" t-att-title="record.note.value" />
+                                    <div class="d-flex align-items-center mt-1">
+                                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                         <field name="priority" widget="priority"/>
+                                         <field name="status" widget="label_selection"
+                                               options="{'classes': {'new': 'success', 'current': 'info', 'done': 'default'}}"/>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="o_kanban_record_bottom">
-                                <div class="oe_kanban_bottom_left">
-                                    <field name="priority" widget="priority" groups="base.group_user" class="me-0" />
-                                    <field name="activity_ids" widget="kanban_activity" class="me-0 px-0" />
-                                    <button class="btn btn-sm text-primary fa fa-paper-plane px-0" type="action"
-                                        title="Send"
-                                        name="%(whatsapp_connector.acrux_chat_message_wizard_action)d"
-                                        context="{'default_invisible_top': True, 'default_conversation_id': id, 'full_name': True}" />
-                                    <button class="btn btn-sm text-primary fa fa-pencil me-0 px-0" type="edit" title="Edit" />
-                                </div>
-                                <div class="oe_kanban_bottom_right">
-                                    <field name="status" widget="label_selection"
-                                           options="{'classes': {'new': 'success', 'current': 'info', 'done': 'default'}}"/>
-                                </div>
-                            </div>
-                            <div class="oe_clear" />
                         </div>
                     </t>
                 </templates>
