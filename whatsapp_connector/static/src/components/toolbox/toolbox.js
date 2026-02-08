@@ -432,4 +432,4 @@ Toolbox.props = {
     user: Object,
     selectedConversation: { optional: true },
 };
-Toolbox.components = { CheckBox, Emojis, AttachmentList, ActivityButton, Transition, SelectMenu, Message };
+Toolbox.components = { CheckBox, Emojis, AttachmentList, ActivityButton, Transition, SelectMenu, Message, FileUploader };
