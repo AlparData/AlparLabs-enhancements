@@ -430,6 +430,6 @@ export class Toolbox extends Component {
 Toolbox.template = 'chatroom.Toolbox';
 Toolbox.props = {
     user: Object,
-    selectedConversation: { type: Object, optional: true },
+    selectedConversation: { optional: true },
 };
 Toolbox.components = { CheckBox, Emojis, AttachmentList, ActivityButton, Transition, SelectMenu, Message };

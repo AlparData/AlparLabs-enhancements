@@ -86,7 +86,7 @@ export class TabsContainer extends Component {
 
 TabsContainer.template = 'chatroom.TabsContainer';
 TabsContainer.props = {
-    selectedConversation: { type: Object, optional: true },
+    selectedConversation: { optional: true },
     defaultAnswers: {
         type: Object,
         values: { type: Array, element: Object },

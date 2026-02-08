@@ -233,7 +233,7 @@ export class ConversationList extends Component {
 ConversationList.template = 'chatroom.ConversationList';
 ConversationList.props = {
     mobileNavigate: Function,
-    conversations: { type: Array, element: Object },
-    selectedConversation: { type: Object, optional: true },
+    conversations: { type: Array, optional: true },
+    selectedConversation: { optional: true },
 };
 ConversationList.components = { ChatroomHeader, Conversation, ChatSearch, ConversationCard, Transition };
