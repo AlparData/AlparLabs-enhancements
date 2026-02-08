@@ -40,7 +40,7 @@ export class ChatroomService {
             readFromChatroom: this.readFromChatroom,
             conversationBuildDict: this.buildModelBuildDict('acrux.chat.conversation', 'build_dict'),
             messageBuildDict: this.buildModelBuildDict('acrux.chat.message', 'search_read_from_chatroom', this._groupMessageResult.bind(this)),
-            isAdmin: () => this.services.user.hasGroup('whatsapp_connector.group_chatroom_admin'),
+            isAdmin: () => session.is_admin,
         });
     }
 
@@ -286,7 +286,7 @@ export class ChatroomService {
 }
 
 export const chatroomService = {
-    dependencies: ["orm", "bus_service", "action", "notification", "user"],
+    dependencies: ["orm", "bus_service", "action", "notification"],
     start(env, services) {
         const chatroom = new ChatroomService(env, services);
         return chatroom;
