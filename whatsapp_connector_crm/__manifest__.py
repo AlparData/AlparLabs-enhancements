@@ -40,7 +40,8 @@
     'assets': {
         'web.assets_backend': [
             'whatsapp_connector_crm/static/src/components/*/*.xml',
-            'whatsapp_connector_crm/static/src/jslib/chatroom.js',
+            'whatsapp_connector_crm/static/src/js/*.js',
+            'whatsapp_connector_crm/static/src/js/patches/*.js',
         ],
     },
 }

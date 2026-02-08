@@ -50,7 +50,8 @@
         'web.assets_backend': [
             'whatsapp_connector_bot/static/src/css/chat_bot.css',
             'whatsapp_connector_bot/static/src/components/*/*.xml',
-            'whatsapp_connector_bot/static/jslib/chatroom.js',
+            'whatsapp_connector_bot/static/src/js/*.js',
+            'whatsapp_connector_bot/static/src/js/patches/*.js',
         ],
     },
     'post_load': '',

@@ -40,8 +40,8 @@
     'external_dependencies': {},
     'assets': {
         'web.assets_backend': [
-            'whatsapp_connector_access/static/jslib/chatroom.js',
-        ]
-    }
+            'whatsapp_connector_access/static/src/js/patches/*.js',
+        ],
+    },
 
 }
