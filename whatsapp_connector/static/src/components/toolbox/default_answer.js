@@ -3,8 +3,8 @@
 import { _t } from "@web/core/l10n/translation";
 import { WarningDialog } from "@web/core/errors/error_dialogs";
 import { Component } from "@odoo/owl";
-import { ConversationModel } from "../../models/conversation_model";
-import { DefaultAnswerModel } from "../../models/default_answer_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
 
 export class DefaultAnswer extends Component {
     async sendAnswer(event) {

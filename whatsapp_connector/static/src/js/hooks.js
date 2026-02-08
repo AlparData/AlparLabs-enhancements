@@ -6,8 +6,8 @@ import { Deferred } from "@web/core/utils/concurrency";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { assignDefined } from "@mail/utils/common/misc";
 import { rpc } from "@web/core/network/rpc";
-import { Attachment } from "../models/attachment";
-import { dataUrlToBlob, getNextId } from "./utils";
+import { Attachment } from "@whatsapp_connector/models/attachment";
+import { dataUrlToBlob, getNextId } from "@whatsapp_connector/js/utils";
 
 export function useAttachmentUploader({ onFileUploaded, buildFormData }) {
     const { bus, upload } = useService('file_upload');

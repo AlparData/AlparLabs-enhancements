@@ -2,8 +2,8 @@
 
 import { Component } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { ConversationModel } from "../../models/conversation_model";
-import { ConversationName } from "../conversationName/conversationName";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { ConversationName } from "@whatsapp_connector/components/conversationName/conversationName";
 
 export class ConversationHeader extends Component {
     setup() {

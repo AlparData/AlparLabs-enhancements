@@ -2,8 +2,10 @@
 
 import { Component, useRef, onWillUpdateProps, onPatched, onMounted } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { Message } from "../message/message";
-import { ConversationModel } from "../../models/conversation_model";
+import { LoadingIndicator } from "@whatsapp_connector/components/chatroom/loading_indicator";
+import { Message } from "@whatsapp_connector/components/message/message";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { MessageModel } from "@whatsapp_connector/models/message_model";
 
 export class ConversationThread extends Component {
     setup() {

@@ -4,7 +4,7 @@ import { _t } from "@web/core/l10n/translation";
 import { browser } from "@web/core/browser/browser";
 import { router } from "@web/core/browser/router";
 import { Component, xml, onWillStart, onWillDestroy, onWillUpdateProps, useRef } from "@odoo/owl";
-import { ConversationModel } from "../../models/conversation_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 
 export class ChatroomActionTab extends Component {
     setup() {

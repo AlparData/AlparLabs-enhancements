@@ -3,17 +3,17 @@
 import { _t } from "@web/core/l10n/translation";
 import { Notebook } from "@web/core/notebook/notebook";
 import { Component } from "@odoo/owl";
-import { NotebookChat } from "./notebook_chat";
-import { DefaultAnswer } from "../toolbox/default_answer";
-import { ConversationForm } from "../actions/conversation_form";
-import { ConversationKanban } from "../actions/conversation_kanban";
-import { ConversationPanelForm } from "../actions/conversation_panel_form";
-import { AiInterfaceForm } from "../actions/ai_interface_form";
-import { PartnerForm } from "../actions/partner_form";
-import { ConversationModel } from "../../models/conversation_model";
-import { DefaultAnswerModel } from "../../models/default_answer_model";
-import { ProductContainer } from "../toolbox/product_container";
-import { UserModel } from "../../models/user_model";
+import { NotebookChat } from "@whatsapp_connector/components/chatroom/notebook_chat";
+import { DefaultAnswer } from "@whatsapp_connector/components/toolbox/default_answer";
+import { ConversationForm } from "@whatsapp_connector/components/actions/conversation_form";
+import { ConversationKanban } from "@whatsapp_connector/components/actions/conversation_kanban";
+import { ConversationPanelForm } from "@whatsapp_connector/components/actions/conversation_panel_form";
+import { AiInterfaceForm } from "@whatsapp_connector/components/actions/ai_interface_form";
+import { PartnerForm } from "@whatsapp_connector/components/actions/partner_form";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
+import { ProductContainer } from "@whatsapp_connector/components/toolbox/product_container";
+import { UserModel } from "@whatsapp_connector/models/user_model";
 
 export class TabsContainer extends Component {
     setup() {

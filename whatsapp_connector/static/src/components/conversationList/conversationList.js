@@ -5,11 +5,11 @@ import { browser } from "@web/core/browser/browser";
 import { Transition } from "@web/core/transition";
 import { Component, useState, useEffect, useRef } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { ChatroomHeader } from "../chatroomHeader/chatroomHeader";
-import { Conversation } from "../conversation/conversation";
-import { ChatSearch } from "../chatSearch/chatSearch";
-import { ConversationCard } from "../conversationCard/conversationCard";
-import { ConversationModel } from "../../models/conversation_model";
+import { ChatroomHeader } from "@whatsapp_connector/components/chatroomHeader/chatroomHeader";
+import { Conversation } from "@whatsapp_connector/components/conversation/conversation";
+import { ChatSearch } from "@whatsapp_connector/components/chatSearch/chatSearch";
+import { ConversationCard } from "@whatsapp_connector/components/conversationCard/conversationCard";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 
 export class ConversationList extends Component {
     setup() {

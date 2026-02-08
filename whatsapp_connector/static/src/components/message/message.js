@@ -3,12 +3,13 @@
 import { _t } from "@web/core/l10n/translation";
 import { Many2OneAvatarField } from "@web/views/fields/many2one_avatar/many2one_avatar_field";
 import { Component, xml, useRef } from "@odoo/owl";
-import { AttachmentList } from "../attachmentList/attachmentList";
-import { AudioPlayer } from "../audioPlayer/audioPlayer";
-import { MessageModel } from "../../models/message_model";
-import { MessageMetadata } from "./message_metadata";
-import { MessageOptions } from "./message_options";
-import { StoryDialog } from "./story_dialog";
+import { AttachmentList } from "@whatsapp_connector/components/attachmentList/attachmentList";
+import { AudioPlayer } from "@whatsapp_connector/components/audioPlayer/audioPlayer";
+import { MessageModel } from "@whatsapp_connector/models/message_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { MessageMetadata } from "@whatsapp_connector/components/message/message_metadata";
+import { MessageOptions } from "@whatsapp_connector/components/message/message_options";
+import { StoryDialog } from "@whatsapp_connector/components/message/story_dialog";
 
 export class Message extends Component {
     setup() {

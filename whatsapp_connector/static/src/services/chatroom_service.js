@@ -3,9 +3,9 @@
 import { reactive, EventBus } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { session } from "@web/session";
-import { ConversationModel } from "../models/conversation_model";
-import { UserModel } from "../models/user_model";
-import { DefaultAnswerModel } from "../models/default_answer_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { UserModel } from "@whatsapp_connector/models/user_model";
+import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
 
 export class ChatroomService {
     constructor(env, services) {

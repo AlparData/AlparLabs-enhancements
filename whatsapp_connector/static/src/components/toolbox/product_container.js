@@ -4,11 +4,11 @@ import { _t } from "@web/core/l10n/translation";
 import { WarningDialog } from "@web/core/errors/error_dialogs";
 import { Component, useState, onWillStart } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { ChatroomHeader } from "../chatroomHeader/chatroomHeader";
-import { ChatSearch } from "../chatSearch/chatSearch";
-import { Product } from "./product";
-import { ConversationModel } from "../../models/conversation_model";
-import { ProductModel } from "../../models/product_model";
+import { ChatroomHeader } from "@whatsapp_connector/components/chatroomHeader/chatroomHeader";
+import { ChatSearch } from "@whatsapp_connector/components/chatSearch/chatSearch";
+import { Product } from "@whatsapp_connector/components/toolbox/product";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { ProductModel } from "@whatsapp_connector/models/product_model";
 
 export class ProductContainer extends Component {
     setup() {

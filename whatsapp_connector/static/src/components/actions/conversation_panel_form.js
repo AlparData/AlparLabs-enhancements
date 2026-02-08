@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { patch } from "@web/core/utils/patch";
-import { ChatroomActionTab } from "./chatroom_action_tab";
+import { ChatroomActionTab } from "@whatsapp_connector/components/actions/chatroom_action_tab";
 
 export class ConversationPanelForm extends ChatroomActionTab {
     setup() {

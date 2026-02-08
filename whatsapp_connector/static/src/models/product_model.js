@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { parseDateTime, formatDateTime } from "@web/core/l10n/dates";
-import { ChatBaseModel } from "./chat_base_model";
+import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
 
 export class ProductModel extends ChatBaseModel {
     constructor(comp) {

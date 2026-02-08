@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { Component, onWillUpdateProps, onWillStart } from "@odoo/owl";
-import { AudioPlayer } from "../audioPlayer/audioPlayer";
+import { AudioPlayer } from "@whatsapp_connector/components/audioPlayer/audioPlayer";
 
 export class MessageMetadata extends Component {
     setup() {

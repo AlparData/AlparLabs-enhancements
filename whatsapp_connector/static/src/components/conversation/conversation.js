@@ -3,7 +3,7 @@
 import { session } from "@web/session";
 import { Component } from "@odoo/owl";
 import { RelativeTime } from "@mail/core/common/relative_time";
-import { ConversationModel } from "../../models/conversation_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 
 export class Conversation extends Component {
     setup() {

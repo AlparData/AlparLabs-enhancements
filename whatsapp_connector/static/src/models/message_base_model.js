@@ -1,68 +1,33 @@
 /** @odoo-module **/
 
-import { markup } from "@odoo/owl";
-import { ChatBaseModel } from "./chat_base_model";
+import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
 
 export class MessageBaseModel extends ChatBaseModel {
     constructor(comp) {
         super(comp);
-        this.env = undefined;
-        this.id = false;
+        this.id = 0;
+        this.ttype = 'text';
         this.text = '';
-        this.textHTML = '';
-        this.ttype = '';
+        this.isProduct = false;
         this.resModel = '';
         this.resId = 0;
-        this.isProduct = false;
+        this.chatList = { id: false, name: '' };
         this.buttons = [];
-        this.chatList = { id: false, name: '', buttonText: '' };
     }
 
     async updateFromJson(base) {
-        if ('id' in base) {
-            this.id = base.id;
-        }
-        if ('text' in base) {
-            this.text = base.text;
-            this.textHTML = markup(this.parseHTML(this.text));
-        }
-        if ('ttype' in base) {
-            this.ttype = base.ttype;
-        }
-        if ('res_model' in base) {
-            this.resModel = base.res_model;
-        }
-        if ('res_id' in base) {
-            this.resId = base.res_id;
-        }
-        if ('is_product' in base) {
-            this.isProduct = base.is_product;
-        }
-        if ('button_ids' in base) {
-            this.buttons = [...base.button_ids];
-        }
-        if ('chat_list_id' in base) {
-            this.chatList = this.convertRecordField(base.chat_list_id, ['buttonText']);
-        }
+        if ('id' in base) { this.id = base.id; }
+        if ('ttype' in base) { this.ttype = base.ttype; }
+        if ('text' in base) { this.text = base.text; }
+        if ('is_product' in base) { this.isProduct = base.is_product; }
+        if ('res_model' in base) { this.resModel = base.res_model; }
+        if ('res_id' in base) { this.resId = base.res_id; }
+        if ('chat_list_id' in base) { this.chatList = this.convertRecordField(base.chat_list_id); }
+        if ('button_ids' in base) { this.buttons = base.button_ids; }
         await super.updateFromJson(base);
     }
 
     get chatListRecord() {
-        return this.convertFieldRecord(this.chatList, ['buttonText']);
-    }
-
-    parseHTML(text) {
-        const regexBold = /(?:^\*|\s\*)(?:(?!\s))((?:(?!\*|\n|<|>).)+)(?:\*)(?=(\s|,|\.|$))/g;
-        const textBold = (text || '').replace(regexBold, ' <strong>$1</strong>');
-        const regexDel = /(?:^~|\s~)(?:(?!\s))((?:(?!~|\n|<|>).)+)(?:~)(?=(\s|,|\.|$))/g;
-        const textDel = textBold.replace(regexDel, ' <del>$1</del>');
-        const regexUnder = /(?:^_|\s_)(?:(?!\s))((?:(?!_|\n|<|>).)+)(?:_)(?=(\s|,|\.|$))/g;
-        const textUnder = textDel.replace(regexUnder, ' <em>$1</em>');
-        const regexURLs = /(https?:\/\/[^\s]+)/g;
-        const textHTML = textUnder.replace(regexURLs, url => {
-            url = url.replace(/<\/?[^>]+(>|$)/g, "");
-            return `<a href="${url}" target="_blank">${url}</a>`;
-        });
-        return textHTML;
+        return this.chatList.id ? [this.chatList.id, this.chatList.name] : false;
     }
 }

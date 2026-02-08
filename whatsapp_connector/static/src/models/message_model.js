@@ -3,8 +3,8 @@
 import { _t } from "@web/core/l10n/translation";
 import { deserializeDateTime, formatDateTime, formatDate, serializeDateTime } from "@web/core/l10n/dates";
 import { assignDefined } from "@mail/utils/common/misc";
-import { MessageBaseModel } from "./message_base_model";
-import { Attachment } from "./attachment";
+import { MessageBaseModel } from "@whatsapp_connector/models/message_base_model";
+import { Attachment } from "@whatsapp_connector/models/attachment";
 
 const { DateTime } = luxon;
 

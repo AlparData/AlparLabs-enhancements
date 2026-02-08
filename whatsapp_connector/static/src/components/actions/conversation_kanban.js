@@ -2,7 +2,7 @@
 
 import { _t } from "@web/core/l10n/translation";
 import { patch } from "@web/core/utils/patch";
-import { ChatroomActionTab } from "./chatroom_action_tab";
+import { ChatroomActionTab } from "@whatsapp_connector/components/actions/chatroom_action_tab";
 
 export class ConversationKanban extends ChatroomActionTab {
     getActionProps(props) {

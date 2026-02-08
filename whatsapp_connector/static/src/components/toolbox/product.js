@@ -2,7 +2,7 @@
 
 import { Component } from "@odoo/owl";
 import { formatMonetary } from "@web/views/fields/formatters";
-import { ProductModel } from "../../models/product_model";
+import { ProductModel } from "@whatsapp_connector/models/product_model";
 
 export class Product extends Component {
     setup() {

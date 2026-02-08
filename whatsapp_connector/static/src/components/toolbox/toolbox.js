@@ -7,17 +7,17 @@ import { Transition } from "@web/core/transition";
 import { SelectMenu } from "@web/core/select_menu/select_menu";
 import { Component, useRef, useState, useEffect, onWillStart, onWillUpdateProps } from "@odoo/owl";
 import { user } from "@web/core/user";
-import { Emojis } from "./emojis";
-import { ActivityButton } from "../chatroom/activity_button";
-import { useAttachmentUploader } from "../../js/hooks";
-import { ConversationModel } from "../../models/conversation_model";
-import { MessageModel } from "../../models/message_model";
-import { UserModel } from "../../models/user_model";
-import { AttachmentList } from "../attachmentList/attachmentList";
-import { FileUploader } from "./file_uploader";
-// Actually, let's assume FileUploader is also modularized or we use the base one.
-// The original code had FileUploader defined in chatroom.js too.
-import { Message } from "../message/message";
+import { ActivityButton } from "@whatsapp_connector/components/chatroom/activity_button";
+import { AttachmentList } from "@whatsapp_connector/components/attachmentList/attachmentList";
+import { AudioPlayer } from "@whatsapp_connector/components/audioPlayer/audioPlayer";
+import { Message } from "@whatsapp_connector/components/message/message";
+import { Emojis } from "@whatsapp_connector/components/toolbox/emojis";
+import { FileUploader } from "@whatsapp_connector/components/toolbox/file_uploader";
+import { useAttachmentUploader } from "@whatsapp_connector/js/hooks";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
+import { MessageModel } from "@whatsapp_connector/models/message_model";
+import { UserModel } from "@whatsapp_connector/models/user_model";
 import { _t } from "@web/core/l10n/translation";
 
 export class Toolbox extends Component {

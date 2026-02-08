@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { ChatBaseModel } from "./chat_base_model";
+import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
 
 export class UserModel extends ChatBaseModel {
     constructor(comp) {

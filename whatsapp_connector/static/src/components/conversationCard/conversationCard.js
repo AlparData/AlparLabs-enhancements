@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { Component } from "@odoo/owl";
-import { ConversationModel } from "../../models/conversation_model";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 
 export class ConversationCard extends Component {
     setup() {

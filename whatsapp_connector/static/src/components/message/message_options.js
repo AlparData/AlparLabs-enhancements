@@ -3,7 +3,7 @@
 import { _t } from "@web/core/l10n/translation";
 import { Dialog } from "@web/core/dialog/dialog";
 import { Component } from "@odoo/owl";
-import { MessageModel } from "../../models/message_model";
+import { MessageModel } from "@whatsapp_connector/models/message_model";
 
 const { DateTime } = luxon;
 

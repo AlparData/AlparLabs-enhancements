@@ -3,8 +3,8 @@
 import { deserializeDateTime } from "@web/core/l10n/dates";
 import { Mutex } from "@web/core/utils/concurrency";
 import { user } from "@web/core/user";
-import { ChatBaseModel } from "./chat_base_model";
-import { MessageModel } from "./message_model";
+import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
+import { MessageModel } from "@whatsapp_connector/models/message_model";
 
 export class ConversationModel extends ChatBaseModel {
     constructor(comp) {

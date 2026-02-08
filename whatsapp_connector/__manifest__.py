@@ -86,11 +86,13 @@
 
             'whatsapp_connector/static/src/models/*.js',
             'whatsapp_connector/static/src/js/*.js',
-            'whatsapp_connector/static/src/services/chatroom_notification_service.js',
-            'whatsapp_connector/static/src/services/chatroom_service.js',
-            'whatsapp_connector/static/src/client_actions/chatroom_action.js',
-            'whatsapp_connector/static/src/components/*/*.js',
             'whatsapp_connector/static/src/services/*.js',
+
+            'whatsapp_connector/static/src/components/*/*.scss',
+            'whatsapp_connector/static/src/components/*/*.xml',
+            'whatsapp_connector/static/src/components/*/*.js',
+
+            'whatsapp_connector/static/src/client_actions/chatroom_action.js',
 
             # 'whatsapp_connector/static/jslib/chatroom.js',
         ],

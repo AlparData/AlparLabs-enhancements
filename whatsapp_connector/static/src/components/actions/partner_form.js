@@ -2,8 +2,8 @@
 
 import { user } from "@web/core/user";
 import { patch } from "@web/core/utils/patch";
-import { ChatroomActionTab } from "./chatroom_action_tab";
-import { ConversationModel } from "../../models/conversation_model";
+import { ChatroomActionTab } from "@whatsapp_connector/components/actions/chatroom_action_tab";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 
 export class PartnerForm extends ChatroomActionTab {
     getExtraContext(props) {
