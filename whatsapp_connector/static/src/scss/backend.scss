@@ -5,6 +5,27 @@
     }
 }
 
+// Estilo mensajes de tipo 'info' (Transferencia, etc)
+.o_chat_message_info {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 1.5rem 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    &::before, &::after { display: none !important; }
+    span {
+        background-color: transparent !important;
+        color: rgba(var(--o-main-text-color-rgb, 120, 120, 120), 0.6) !important;
+        font-size: 0.8rem !important;
+        font-weight: normal !important;
+        text-align: center;
+        padding: 0 !important;
+        border: none !important;
+    }
+}
+
 .o_Chatroom {
 
     // chat.panel

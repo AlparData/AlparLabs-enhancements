@@ -49,34 +49,29 @@ class Conversation(models.Model):
         target_conv = self.search(domain, limit=1)
         
         if not target_conv:
-            # Create new conversation
-            vals = {
-                'name': self.name,
-                'number': target_number,
+            # Move current record
+            self.write({
+
+
                 'connector_id': target_connector.id,
-                'conv_type': self.conv_type,
-                'res_partner_id': self.res_partner_id.id,
-                'status': 'new',
-                'team_id': self.team_id.id,
-                'priority': self.priority,
-            }
-            # Copy other relevant fields if needed
-            target_conv = self.create(vals)
-        
-        # Basic validation for access rights on target connector
-        # We assume if the agent is assigned to this connector, they have access
-        # But we can check if we want to be strict.
-        
-        # Link conversations (Option 1)
-        self._link_conversations(target_conv)
-        
-        # Assign agent to target conversation and set to current
-        target_conv.agent_id = self.tmp_agent_id
-        target_conv.set_to_current()
-        
+                'number': target_number,
+                'agent_id': self.tmp_agent_id.id,
+                'status': 'current',
+                'tmp_agent_id': False,
+            })
+            target_conv = self
+        else:
+            # Conflict exists: must switch to the other record
+            self.set_to_done()
+            target_conv.write({'agent_id': self.tmp_agent_id.id, 'status': 'current'})
+            self.tmp_agent_id = False
+            
+        # Create info message in target_conv
+        target_conv._send_transfer_notification(target_connector)
+
         # Notification to target agent
         if target_connector.notify_discuss:
-            target_conv.notify_discuss_to_user(self.tmp_agent_id, 'I delegated a Chat to you (from %s).' % self.connector_id.name)
+            target_conv.notify_discuss_to_user(self.tmp_agent_id, 'I delegated a Chat to you.')
             
         # Update source conversation
         self.tmp_agent_id = False
@@ -88,24 +83,8 @@ class Conversation(models.Model):
         return True
 
     def _link_conversations(self, target_conv):
-        # Create info messages linking them
-        Message = self.env['acrux.chat.message']
-        
-        # Message in Source
-        Message.create({
-            'contact_id': self.id,
-            'ttype': 'info',
-            'from_me': True,
-            'text': _('Conversation delegated to %s on %s.') % (self.tmp_agent_id.name, target_conv.connector_id.name)
-        })
-        
-        # Message in Target
-        Message.create({
-            'contact_id': target_conv.id,
-            'ttype': 'info',
-            'from_me': True,
-            'text': _('Conversation delegated from %s (Agent: %s).') % (self.connector_id.name, self.agent_id.name or self.env.user.name)
-        })
+        # Deprecated: replaced by info message in _delegate_to_different_connector
+        pass
 
     def _send_delegation_notifications(self, target_conv):
         # Notify source changes
@@ -124,8 +103,9 @@ class Conversation(models.Model):
         else:
              notifications.append((self.get_channel_to_many(), 'new_messages', data_target))
              
-        # Also notify specific agent channel if needed, as per original delegate_conversation
-        # Original: notifications.append((self.get_channel_to_one(), 'update_conversation', data))
+        # FORCE update to specific agent channel to ensure it appears
+        target_conv.with_user(self.tmp_agent_id).env.user
+        notifications.append((target_conv.get_channel_to_one(), 'update_conversation', data_target))
         
         self._sendmany(notifications)
 
