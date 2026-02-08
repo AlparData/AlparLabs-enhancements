@@ -32,6 +32,7 @@ useEffect(()=>{if(this.props?.actionProps?.context?.chatroom_wizard_search){cons
 defaultButton.classList.add('d-none')}},()=>[])},}
 patch(ActionDialog.prototype,chatroomDialogHack)
 return __exports;});;
+/*
 odoo.define('@7786438cd71f02c0379165c08de97c669ab6ee7861ac0cfabdfc27ed36dc9c2f',['@web/core/utils/numbers','@web/core/l10n/translation','@web/views/fields/file_handler','@web/core/utils/urls','@web/session'],function(require){'use strict';let __exports={};const{humanNumber}=require('@web/core/utils/numbers')
 const{_t}=require('@web/core/l10n/translation')
 const{FileUploader:FileUploaderBase}=require('@web/views/fields/file_handler')
@@ -53,7 +54,8 @@ try{await this.props.onUploaded({name:file.name,size:file.size,type:file.type,da
 target.value=null
 if(this.props.multiUpload&&this.props.onUploadComplete){this.props.onUploadComplete({})}}}
 __exports[Symbol.for("default")]=FileUploader
-return __exports;});;
+return __exports;});
+*/
 odoo.define('@ee83fb4fd47333627b4e83065709a34856d3610ba96a2d1833b1516dbaba9acc',['@web/core/utils/patch','@web/views/form/form_controller','@odoo/owl','@web/core/utils/hooks'],function(require){'use strict';let __exports={};const{patch}=require('@web/core/utils/patch')
 const{FormController}=require('@web/views/form/form_controller')
 const{useSubEnv}=require('@odoo/owl')
@@ -1675,8 +1677,10 @@ this.services.notification.add(message,notify)}
 await this.playNotification()},async playNotification(){if(this.canPlay){try{await this.audio.play()}catch{}}},}
 registry.category('services').add('chatroomNotification',chatroomNotificationService)
 return __exports;});;
+/*
 odoo.define('@50bd62c355a305e2bf67972dc3f4b202671c326267beab90445ecbd84862507a',['@web/core/registry','@42ffbf6224f23aacdf6b9a6289d4e396904ef6225cba7443d521319d2137e2b6'],function(require){'use strict';let __exports={};const{registry}=require('@web/core/registry')
 const{Chatroom}=require('@42ffbf6224f23aacdf6b9a6289d4e396904ef6225cba7443d521319d2137e2b6')
 registry.category('actions').add('acrux.chat.conversation_tag',Chatroom)
 registry.category('actions').add('acrux.chat.null_action_tag',()=>{})
-return __exports;});;
+return __exports;});
+*/

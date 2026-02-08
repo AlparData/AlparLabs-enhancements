@@ -3,7 +3,7 @@
 import { _t } from "@web/core/l10n/translation";
 import { Notebook } from "@web/core/notebook/notebook";
 import { Component } from "@odoo/owl";
-import { NotebookChat } from "../chatroom/notebook_chat";
+import { NotebookChat } from "./notebook_chat";
 import { DefaultAnswer } from "../toolbox/default_answer";
 import { ConversationForm } from "../actions/conversation_form";
 import { ConversationKanban } from "../actions/conversation_kanban";

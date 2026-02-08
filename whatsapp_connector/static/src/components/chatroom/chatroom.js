@@ -7,12 +7,12 @@ import { session } from "@web/session";
 import { Component, useState, useSubEnv, onWillStart, onWillDestroy, useRef } from "@odoo/owl";
 import { EventBus } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { ConversationThread } from "./conversationThread/conversationThread";
-import { ConversationHeader } from "./conversationHeader/conversationHeader";
-import { ConversationList } from "./conversationList/conversationList";
-import { Toolbox } from "./toolbox/toolbox";
-import { TabsContainer } from "./chatroom/tabs_container";
-import { LoadingIndicator } from "./chatroom/loading_indicator";
+import { ConversationThread } from "../conversationThread/conversationThread";
+import { ConversationHeader } from "../conversationHeader/conversationHeader";
+import { ConversationList } from "../conversationList/conversationList";
+import { Toolbox } from "../toolbox/toolbox";
+import { TabsContainer } from "./tabs_container";
+import { LoadingIndicator } from "./loading_indicator";
 import { ConversationModel } from "../models/conversation_model";
 import { UserModel } from "../models/user_model";
 import { DefaultAnswerModel } from "../models/default_answer_model";
@@ -63,6 +63,3 @@ export class Chatroom extends Component {
 
 Chatroom.template = 'chatroom.Chatroom';
 Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator };
-
-registry.category('actions').add('acrux.chat.conversation_tag', Chatroom);
-registry.category('actions').add('acrux.chat.null_action_tag', () => {});

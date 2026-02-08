@@ -14,7 +14,7 @@ import { ConversationModel } from "../../models/conversation_model";
 import { MessageModel } from "../../models/message_model";
 import { UserModel } from "../../models/user_model";
 import { AttachmentList } from "../attachmentList/attachmentList";
-import { FileUploader } from "../../jslib/chatroom"; // We might need to modularize FileUploader too, but for now referencing original or assuming it's available.
+import { FileUploader } from "./file_uploader";
 // Actually, let's assume FileUploader is also modularized or we use the base one.
 // The original code had FileUploader defined in chatroom.js too.
 import { Message } from "../message/message";
