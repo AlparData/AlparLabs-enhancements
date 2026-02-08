@@ -275,7 +275,7 @@ calculateMessageCount(){if(['new','current'].includes(this.status)){const messag
 let lastIndexOf
 if(Array.prototype.findLastIndex){lastIndexOf=messages.findLastIndex(msg=>msg.fromMe)}else{lastIndexOf=messages.map(msg=>msg.fromMe).lastIndexOf(true)}
 this.countNewMsg=messages.length-(lastIndexOf+1)}else{this.countNewMsg=0}}
-async syncMoreMessage({forceSync=false,withPriority=false}={}){if(this.messages.length>=22||forceSync){this.ready=false
+async syncMoreMessage({forceSync=false,withPriority=false}={}){if(this.messages.length>0||forceSync){this.ready=false
 const result=await this.env.messageBuildDict(this.id,22,this.messages.length,withPriority)
 if(!this.ready&&result.length>0){await this.appendMessages(result[0].messages)}
 this.ready=true}}
@@ -847,9 +847,9 @@ getSubEnv(){return{context:this.props.action.context,chatBus:new EventBus(),chat
 async willStart(){return Promise.all([this.getCurrency().then(res=>{this.currencyId=res}),this.getDefaultAnswers().then(res=>{this.defaultAnswers=res}),this.loadModelsUsedFields(),this.getConversationInfoView().then(res=>{this.conversationInfoForm=res}),this.getConversationKanbanView().then(res=>{this.conversationKanban=res}),this.getAiIntefaceView().then(res=>{this.aiIntefaceForm=res}),this.getUserPreference().then(res=>this.state.user.updateFromJson(res)),user.hasGroup('whatsapp_connector.group_chat_show_user_in_message').then(res=>{this.showUserInMessage=res}),user.hasGroup('whatsapp_connector.group_chatroom_admin').then(res=>{this.isAdmin=res}),this.getTranscriptionModel().then(res=>{this.canTranscribe=res}),this.getTranslationModel().then(res=>{this.canTranslate=res}),]).then(()=>{if(this.canPlay){this.audio=new Audio()
 if(this.audio.canPlayType('audio/ogg; codecs=vorbis')){this.audio.src=url('/mail/static/src/audio/ting.ogg')}else{this.audio.src=url('/mail/static/src/audio/ting.mp3')}}})}
 async setServerConversation(){const convIds=await this.env.services.orm.call(this.env.chatModel,'search_active_conversation',[],{context:this.env.context})
-let data=await Promise.all(convIds.map(convId=>this.env.conversationBuildDict(convId,0,0)))
+let data=await Promise.all(convIds.map(convId=>this.env.conversationBuildDict(convId,12,0)))
 await this.upsertConversation(data.filter(item=>item.length).map(item=>item[0]))
-this.state.conversations.forEach(conv=>{conv.ready=false})
+this.state.conversations.forEach(conv=>{conv.ready=true})
 
 if(this.props.selectedConversationId){const conv=this.state.conversations.find(conv=>conv.id===this.props.selectedConversationId)
 if(conv){this.selectConversation({detail:{conv}})}else{this.selectConversation({detail:{conv:null}})}}else{this.selectConversation({detail:{conv:null}})}}
@@ -1052,7 +1052,8 @@ this.env;}
 onClick(){this.env.chatBus.trigger(this.props.selectTrigger,this.props.conversation)}}
 Object.assign(ConversationCard,{template:'chatroom.ConversationCard',props:{conversation:ConversationModel.prototype,className:{type:String,optional:true},selectTrigger:{type:String,optional:true},},defaultProps:{className:'',selectTrigger:'initAndNotifyConversation',},components:{}})
 return __exports;});;
-odoo.define('@beeaf954ff9ccf25f357f70e74c5694ebdfbd24b19c687bd9a0808adec370c9f',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef','@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+odoo.define('@beeaf954ff9ccf25f357f70e74c5694ebdfbd24b19c687bd9a0808adec370c9f',['@odoo/owl','@web/core/utils/hooks','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef','@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+const{useBus}=require('@web/core/utils/hooks')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
 const{ConversationName}=require('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde')
 const ConversationHeader=__exports.ConversationHeader=class ConversationHeader extends Component{setup(){super.setup()
@@ -1061,7 +1062,8 @@ this.props
 useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===this.props.selectedConversation?.id){this.render()}})}}
 Object.assign(ConversationHeader,{template:'chatroom.ConversationHeader',props:{selectedConversation:ConversationModel.prototype,},components:{ConversationName}})
 return __exports;});;
-odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@web/core/utils/hooks','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+const{useBus}=require('@web/core/utils/hooks')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
 const ConversationName=__exports.ConversationName=class ConversationName extends Component{setup(){super.setup()
 this.env
