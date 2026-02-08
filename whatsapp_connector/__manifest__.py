@@ -86,7 +86,8 @@
 
             'whatsapp_connector/static/src/models/*.js',
             'whatsapp_connector/static/src/js/*.js',
-            'whatsapp_connector/static/src/js/patches/*.js',
+            'whatsapp_connector/static/src/services/chatroom_notification_service.js',
+            'whatsapp_connector/static/src/services/chatroom_service.js',
             'whatsapp_connector/static/src/components/*/*.js',
             'whatsapp_connector/static/src/services/*.js',
 
