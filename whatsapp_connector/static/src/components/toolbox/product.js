@@ -20,5 +20,5 @@ export class Product extends Component {
 
 Product.template = 'chatroom.Product';
 Product.props = {
-    product: ProductModel,
+    product: Object,
 };

@@ -157,6 +157,6 @@ export class ConversationThread extends Component {
 
 ConversationThread.template = 'chatroom.ConversationThread';
 ConversationThread.props = {
-    selectedConversation: ConversationModel,
+    selectedConversation: { optional: true },
 };
 ConversationThread.components = { Message };

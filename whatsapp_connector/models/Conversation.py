@@ -1229,8 +1229,24 @@ class AcruxChatConversation(models.Model):
                 default_answers[key] = default_answers[-1] + default_answers[key]
                 default_answers[key].sort(key=lambda x: x.get('sequence', 0))
 
+        # 4. Model fields
+        model_fields = {
+            'acrux.chat.conversation': Conversations.get_fields_to_read(),
+            'acrux.chat.message': Conversations.get_message_fields_to_read(),
+            'ir.attachment': Conversations.get_attachment_fields_to_read(),
+            'product.product': Conversations.get_product_fields_to_read(),
+        }
+
+        # 5. Bots
+        bots = []
+        if 'acrux.chat.bot' in self.env:
+            bots = self.env['acrux.chat.bot'].search_read([('is_ai', '=', True)],
+                                                         ['name', 'color_text', 'ai_bot_type', 'seq'])
+
         return {
             'user': user_pref,
             'conversations': conversations,
             'default_answers': default_answers,
+            'model_fields': model_fields,
+            'bots': bots,
         }

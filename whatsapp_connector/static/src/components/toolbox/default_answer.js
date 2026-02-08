@@ -52,6 +52,6 @@ export class DefaultAnswer extends Component {
 
 DefaultAnswer.template = 'chatroom.DefaultAnswer';
 DefaultAnswer.props = {
-    selectedConversation: ConversationModel,
-    defaultAnswer: DefaultAnswerModel,
+    selectedConversation: { optional: true },
+    defaultAnswer: Object,
 };

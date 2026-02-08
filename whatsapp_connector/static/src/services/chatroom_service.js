@@ -50,36 +50,23 @@ export class ChatroomService {
 
     async fetchData() {
         const { orm } = this.services;
-        
-        // Load model fields and Bots first
-        const loadFields = async (model, func) => {
-            const res = await orm.call('acrux.chat.conversation', func, [], { context: this.env.context });
-            this.modelsUsedFields[model] = res;
-            this.readFromChatroom[model] = this.buildBatchRequester(model);
-        };
-        
-        const loadBots = async () => {
-            try {
-                const data = await orm.searchRead('acrux.chat.bot', [['is_ai', '=', true]], ['name', 'color_text', 'ai_bot_type', 'seq'], { context: this.env.context });
-                this.state.bots = data.map(d => ({ value: d.id, label: d.name }));
-                this.state.bots_map = data.reduce((acc, obj) => {
-                    acc[obj.id] = obj;
-                    return acc;
-                }, {});
-            } catch (e) {
-                console.warn('Could not load bots, maybe module not installed:', e);
-            }
-        };
-
-        await Promise.all([
-            loadFields('acrux.chat.conversation', 'get_fields_to_read'),
-            loadFields('acrux.chat.message', 'get_message_fields_to_read'),
-            loadFields('ir.attachment', 'get_attachment_fields_to_read'),
-            loadFields('product.product', 'get_product_fields_to_read'),
-            loadBots(),
-        ]);
-
         const data = await orm.call('acrux.chat.conversation', 'get_chatroom_data', [], { context: this.env.context });
+
+        // Load model fields and Bots from consolidated data
+        if (data.model_fields) {
+            for (const [model, fields] of Object.entries(data.model_fields)) {
+                this.modelsUsedFields[model] = fields;
+                this.readFromChatroom[model] = this.buildBatchRequester(model);
+            }
+        }
+
+        if (data.bots) {
+            this.state.bots = data.bots.map(d => ({ value: d.id, label: d.name }));
+            this.state.bots_map = data.bots.reduce((acc, obj) => {
+                acc[obj.id] = obj;
+                return acc;
+            }, {});
+        }
         
         if (data.user.chatroom_batch_process) {
             this.batchSize = parseInt(data.user.chatroom_batch_process);

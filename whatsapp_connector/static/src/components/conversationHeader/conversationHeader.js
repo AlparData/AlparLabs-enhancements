@@ -18,6 +18,6 @@ export class ConversationHeader extends Component {
 
 ConversationHeader.template = 'chatroom.ConversationHeader';
 ConversationHeader.props = {
-    selectedConversation: ConversationModel,
+    selectedConversation: { optional: true },
 };
 ConversationHeader.components = { ConversationName };

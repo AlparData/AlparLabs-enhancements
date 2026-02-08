@@ -17,5 +17,5 @@ export class ConversationName extends Component {
 
 ConversationName.template = 'chatroom.ConversationName';
 ConversationName.props = {
-    selectedConversation: ConversationModel,
+    selectedConversation: { optional: true },
 };

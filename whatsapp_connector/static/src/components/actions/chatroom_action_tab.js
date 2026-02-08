@@ -185,7 +185,7 @@ ChatroomActionTab.props = {
     viewTitle: String,
     viewKey: String,
     viewResId: { type: [Number, Boolean], optional: true },
-    selectedConversation: { type: ConversationModel, optional: true },
+    selectedConversation: { optional: true },
     searchButton: { type: Boolean, optional: true },
     searchButtonString: { type: String, optional: true },
 };

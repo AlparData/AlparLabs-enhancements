@@ -15,7 +15,7 @@ export class ConversationCard extends Component {
 
 ConversationCard.template = 'chatroom.ConversationCard';
 ConversationCard.props = {
-    conversation: ConversationModel,
+    conversation: Object,
     className: { type: String, optional: true },
     selectTrigger: { type: String, optional: true },
 };

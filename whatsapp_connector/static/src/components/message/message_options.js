@@ -67,7 +67,7 @@ export class MessageOptions extends Component {
 
 MessageOptions.template = 'chatroom.MessageOptions';
 MessageOptions.props = {
-    message: MessageModel,
+    message: Object,
     close: Function,
     env: Object,
 };

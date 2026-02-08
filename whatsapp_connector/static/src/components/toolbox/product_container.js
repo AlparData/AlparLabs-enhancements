@@ -51,7 +51,7 @@ export class ProductContainer extends Component {
 
 ProductContainer.template = 'chatroom.ProductContainer';
 ProductContainer.props = {
-    selectedConversation: ConversationModel,
+    selectedConversation: { optional: true },
     className: { type: String, optional: true }
 };
 ProductContainer.defaultProps = {

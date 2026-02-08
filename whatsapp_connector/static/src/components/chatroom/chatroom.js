@@ -60,4 +60,8 @@ export class Chatroom extends Component {
 }
 
 Chatroom.template = 'chatroom.Chatroom';
+Chatroom.props = {
+    action: { type: Object, optional: true },
+    actionId: { type: Number, optional: true },
+};
 Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator, ChatroomHeader };
