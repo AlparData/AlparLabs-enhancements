@@ -286,7 +286,7 @@ export class ChatroomService {
 }
 
 export const chatroomService = {
-    dependencies: ["orm", "bus_service", "action", "notification"],
+    dependencies: ["orm", "bus_service", "action", "notification", "user"],
     start(env, services) {
         const chatroom = new ChatroomService(env, services);
         return chatroom;
