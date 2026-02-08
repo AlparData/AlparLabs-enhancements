@@ -86,10 +86,10 @@ export class TabsContainer extends Component {
 
 TabsContainer.template = 'chatroom.TabsContainer';
 TabsContainer.props = {
-    selectedConversation: ConversationModel,
+    selectedConversation: { type: Object, optional: true },
     defaultAnswers: {
         type: Object,
-        values: { type: Array, element: DefaultAnswerModel },
+        values: { type: Array, element: Object },
     },
     conversationInfoForm: { type: Number, optional: true },
     conversationKanban: { type: Number, optional: true },
@@ -97,7 +97,7 @@ TabsContainer.props = {
     aiInterfaceForm: { type: Number, optional: true },
     className: { type: String, optional: true },
     tabSelected: { type: String, optional: true },
-    user: UserModel,
+    user: Object,
 };
 TabsContainer.defaultProps = {
     className: ''

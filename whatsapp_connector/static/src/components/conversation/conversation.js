@@ -30,8 +30,8 @@ export class Conversation extends Component {
 
 Conversation.template = 'chatroom.Conversation';
 Conversation.props = {
-    conversation: ConversationModel,
-    selectedConversation: { type: ConversationModel, optional: true },
+    conversation: Object,
+    selectedConversation: { type: Object, optional: true },
     hideClose: { type: Boolean, optional: true },
     selectTrigger: { type: String, optional: true },
     deleteTrigger: { type: String, optional: true },

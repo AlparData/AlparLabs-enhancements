@@ -21,6 +21,7 @@ export class Chatroom extends Component {
     setup() {
         super.setup();
         this.chatroom = this.env.services.chatroom;
+        this.state = useState(this.chatroom.state);
         
         const chatBus = this.chatroom.chatBus;
         useSubEnv({
@@ -39,15 +40,11 @@ export class Chatroom extends Component {
         
         useBus(this.env.chatBus, 'selectConversation', ({ detail: { conv } }) => this.chatroom.selectConversation(conv));
         useBus(this.env.chatBus, 'deleteConversation', ({ detail: conv }) => this.chatroom.deleteConversation(conv));
-        useBus(this.env.chatBus, 'selectTab', (tab) => { this.chatroom.state.tabSelected = tab; });
-        useBus(this.env.chatBus, 'mobileNavigate', (side) => { this.chatroom.state.mobileSide = side; });
+        useBus(this.env.chatBus, 'selectTab', (tab) => { this.state.tabSelected = tab; });
+        useBus(this.env.chatBus, 'mobileNavigate', (side) => { this.state.mobileSide = side; });
         useBus(this.env.chatBus, 'initAndNotifyConversation', ({ detail: { id } }) => this.chatroom.initAndNotify(id));
         
         onWillStart(() => this.chatroom.fetchData());
-    }
-
-    get state() {
-        return this.chatroom.state;
     }
 
     async conversationBuildDict(id, limit) {

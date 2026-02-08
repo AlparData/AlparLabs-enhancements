@@ -112,7 +112,7 @@ export class Message extends Component {
 
 Message.template = 'chatroom.Message';
 Message.props = {
-    message: MessageModel,
+    message: Object,
     noAction: { type: Boolean, optional: true },
 };
 Message.defaultProps = {
