@@ -16,13 +16,30 @@ export class ChatroomService {
             conversations: [],
             selectedConversation: null,
             defaultAnswers: {},
-            user: new UserModel({ env: Object.assign(Object.create(env), { chatBus: this.chatBus }) }),
+            user: new UserModel({ env: this.getEnv() }),
             tabSelected: 'tab_default_answer',
             mobileSide: 'leftSide',
             isReady: false,
         });
 
+        this.modelsUsedFields = {};
+        this.readFromChatroom = {};
+        this.batchSize = 64;
+
         this.setupBus();
+    }
+
+    getEnv() {
+        return Object.assign(Object.create(this.env), {
+            chatBus: this.chatBus,
+            chatModel: 'acrux.chat.conversation',
+            services: this.services,
+            modelsUsedFields: this.modelsUsedFields,
+            readFromChatroom: this.readFromChatroom,
+            conversationBuildDict: this.buildModelBuildDict('acrux.chat.conversation', 'build_dict'),
+            messageBuildDict: this.buildModelBuildDict('acrux.chat.message', 'search_read_from_chatroom', this._groupMessageResult.bind(this)),
+            isAdmin: () => this.services.user.hasGroup('whatsapp_connector.group_chatroom_admin'),
+        });
     }
 
     setupBus() {
@@ -31,12 +48,32 @@ export class ChatroomService {
 
     async fetchData() {
         const { orm } = this.services;
+        
+        // Load model fields first for batching
+        const loadFields = async (model, func) => {
+            const res = await orm.call('acrux.chat.conversation', func, [], { context: this.env.context });
+            this.modelsUsedFields[model] = res;
+            this.readFromChatroom[model] = this.buildBatchRequester(model);
+        };
+        
+        await Promise.all([
+            loadFields('acrux.chat.conversation', 'get_fields_to_read'),
+            loadFields('acrux.chat.message', 'get_message_fields_to_read'),
+            loadFields('ir.attachment', 'get_attachment_fields_to_read'),
+            loadFields('product.product', 'get_product_fields_to_read'),
+        ]);
+
         const data = await orm.call('acrux.chat.conversation', 'get_chatroom_data', [], { context: this.env.context });
         
+        if (data.user.chatroom_batch_process) {
+            this.batchSize = parseInt(data.user.chatroom_batch_process);
+        }
+
         this.state.user.updateFromJson(data.user);
         
+        const env = this.getEnv();
         const convList = await Promise.all(data.conversations.map(async (convData) => {
-            const conv = new ConversationModel({ env: Object.assign(Object.create(this.env), { chatBus: this.chatBus }) });
+            const conv = new ConversationModel({ env: env });
             await conv.updateFromJson(convData);
             return conv;
         }));
@@ -45,7 +82,7 @@ export class ChatroomService {
         const answers = {};
         for (const [key, value] of Object.entries(data.default_answers)) {
             answers[key] = await Promise.all(value.map(async (ansData) => {
-                const ans = new DefaultAnswerModel({ env: Object.assign(Object.create(this.env), { chatBus: this.chatBus }) });
+                const ans = new DefaultAnswerModel({ env: env });
                 await ans.updateFromJson(ansData);
                 return ans;
             }));
@@ -53,12 +90,100 @@ export class ChatroomService {
         this.state.defaultAnswers = answers;
         
         if (convList.length) {
-            // Phase 4: Pre-load latest messages for active conversations
             const activeConvs = convList.filter(c => c.status === 'current').slice(0, 5);
             await Promise.all(activeConvs.map(c => c.syncMoreMessage({ forceSync: true })));
         }
 
         this.state.isReady = true;
+    }
+
+    _sendBatchResolver(batch, results) {
+        for (const item of batch) {
+            let found = false;
+            for (const r of results) {
+                if (item.resId === r.id) {
+                    item.resolve([r]);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) { item.resolve([]); }
+        }
+    }
+
+    _groupMessageResult(results) {
+        let convMap = {};
+        for (const item of results) {
+            if (!convMap[item.contact_id[0]]) { convMap[item.contact_id[0]] = []; }
+            convMap[item.contact_id[0]].push(item);
+        }
+        return Object.keys(convMap).map(key => {
+            return { id: parseInt(key), messages: convMap[key] };
+        });
+    }
+
+    buildBatchRequester(resModel, group, delay = 100) {
+        let queue = [];
+        let timer = null;
+        const sendBatch = async () => {
+            if (queue.length === 0) return;
+            clearTimeout(timer);
+            timer = null;
+            const batch = [...queue];
+            queue = [];
+            try {
+                const resIds = batch.map(item => item.resId);
+                let results = await this.services.orm.call(resModel, 'read_from_chatroom', [resIds, this.modelsUsedFields[resModel]], { context: this.env.context });
+                if (group) { results = group(results); }
+                this._sendBatchResolver(batch, results);
+            } catch (error) {
+                batch.forEach(item => item.reject(error));
+            }
+        };
+        return (resId, withPriority = false) => {
+            return new Promise((resolve, reject) => {
+                queue.push({ resId, resolve, reject });
+                if (queue.length >= this.batchSize || withPriority) {
+                    sendBatch();
+                } else if (!timer) {
+                    timer = setTimeout(sendBatch, delay);
+                }
+            });
+        };
+    }
+
+    buildModelBuildDict(resModel, method, group, delay = 100) {
+        let queues = {};
+        const getKey = (limit, offset) => `${limit}_${offset}`;
+        const sendBatch = async (limit, offset) => {
+            const limit_offset = getKey(limit, offset);
+            if (!queues[limit_offset] || queues[limit_offset].length === 0) return;
+            clearTimeout(queues[limit_offset].timer);
+            const batch = [...queues[limit_offset]];
+            delete queues[limit_offset];
+            try {
+                const conversationIds = batch.map(item => item.resId);
+                let results = await this.services.orm.call(resModel, method, [conversationIds, limit, offset, this.modelsUsedFields[resModel]], { context: this.env.context });
+                if (group) { results = group(results); }
+                this._sendBatchResolver(batch, results);
+            } catch (error) {
+                batch.forEach(item => item.reject(error));
+            }
+        };
+        return (conversationId, limit = 22, offset = 0, withPriority = false) => {
+            const limit_offset = getKey(limit, offset);
+            if (!queues[limit_offset]) { queues[limit_offset] = []; }
+            return new Promise((resolve, reject) => {
+                queues[limit_offset].push({ resId: conversationId, resolve, reject });
+                if (queues[limit_offset].length * Math.max(limit, 1) >= this.batchSize || withPriority) {
+                    sendBatch(limit, offset);
+                } else {
+                    if (!queues[limit_offset].timer) {
+                        queues[limit_offset].timer = setTimeout(() => { sendBatch(limit, offset); }, delay);
+                    }
+                }
+            });
+        };
     }
 
     async onNotification({ detail: notifications }) {

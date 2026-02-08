@@ -6,7 +6,6 @@ import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
 export class ProductModel extends ChatBaseModel {
     constructor(comp) {
         super(comp);
-        this.env = undefined;
         this.id = false;
         this.displayName = '';
         this.lstPrice = 0.0;

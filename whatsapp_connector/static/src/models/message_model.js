@@ -11,7 +11,6 @@ const { DateTime } = luxon;
 export class MessageModel extends MessageBaseModel {
     constructor(comp) {
         super(comp);
-        this.env = undefined;
         this.conversation = comp;
         this.fromMe = false;
         this.errorMsg = '';

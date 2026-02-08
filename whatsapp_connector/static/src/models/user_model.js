@@ -5,7 +5,6 @@ import { ChatBaseModel } from "@whatsapp_connector/models/chat_base_model";
 export class UserModel extends ChatBaseModel {
     constructor(comp) {
         super(comp);
-        this.env = undefined;
         this.id = 0;
         this.status = false;
         this.signingActive = false;
