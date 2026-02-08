@@ -1198,3 +1198,39 @@ class AcruxChatConversation(models.Model):
             'messages': message_dict,
         }])
         return message_dict
+
+    @api.model
+    def get_chatroom_data(self):
+        self.check_access_rights('read')
+        Conversations = self.env['acrux.chat.conversation']
+        Answers = self.env['acrux.chat.default.answer']
+        
+        # 1. User preferences
+        user_pref = self.env.user.read(['id', 'chatroom_signing_active', 'acrux_chat_active'])[0]
+        config_params = Conversations.get_config_parameters()
+        user_pref.update(config_params)
+        
+        # 2. Conversations
+        active_ids = Conversations.search_active_conversation()
+        conversations = Conversations.browse(active_ids).build_dict(limit=12)
+        
+        # 3. Default Answers
+        answers_data = Answers.get_for_chatroom()
+        default_answers = {-1: []}
+        for answer in answers_data:
+            conn_id = answer.get('connector_id') and answer['connector_id'][0] or -1
+            if conn_id not in default_answers:
+                default_answers[conn_id] = []
+            default_answers[conn_id].append(answer)
+        
+        # Combine global answers with specific ones
+        for key in list(default_answers.keys()):
+            if key != -1:
+                default_answers[key] = default_answers[-1] + default_answers[key]
+                default_answers[key].sort(key=lambda x: x.get('sequence', 0))
+
+        return {
+            'user': user_pref,
+            'conversations': conversations,
+            'default_answers': default_answers,
+        }
