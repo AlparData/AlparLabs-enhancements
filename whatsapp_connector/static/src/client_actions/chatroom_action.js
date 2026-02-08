@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-import { Chatroom } from "../components/chatroom/chatroom";
+import { Chatroom } from "@whatsapp_connector/components/chatroom/chatroom";
 
 /**
  * Modern Action Loader for Odoo 18.

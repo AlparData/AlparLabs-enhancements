@@ -7,15 +7,15 @@ import { session } from "@web/session";
 import { Component, useState, useSubEnv, onWillStart, onWillDestroy, useRef } from "@odoo/owl";
 import { EventBus } from "@odoo/owl";
 import { useBus } from "@web/core/utils/hooks";
-import { ConversationThread } from "../conversationThread/conversationThread";
-import { ConversationHeader } from "../conversationHeader/conversationHeader";
-import { ConversationList } from "../conversationList/conversationList";
-import { Toolbox } from "../toolbox/toolbox";
-import { TabsContainer } from "./tabs_container";
-import { LoadingIndicator } from "./loading_indicator";
-import { ConversationModel } from "../models/conversation_model";
-import { UserModel } from "../models/user_model";
-import { DefaultAnswerModel } from "../models/default_answer_model";
+import { ConversationThread } from "@whatsapp_connector/components/conversationThread/conversationThread";
+import { ConversationHeader } from "@whatsapp_connector/components/conversationHeader/conversationHeader";
+import { ConversationList } from "@whatsapp_connector/components/conversationList/conversationList";
+import { Toolbox } from "@whatsapp_connector/components/toolbox/toolbox";
+import { TabsContainer } from "@whatsapp_connector/components/chatroom/tabs_container";
+import { LoadingIndicator } from "@whatsapp_connector/components/chatroom/loading_indicator";
+import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
+import { UserModel } from "@whatsapp_connector/models/user_model";
+import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
 
 export class Chatroom extends Component {
     setup() {
