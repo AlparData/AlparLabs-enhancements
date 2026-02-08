@@ -14,6 +14,7 @@ import { Toolbox } from "@whatsapp_connector/components/toolbox/toolbox";
 import { TabsContainer } from "@whatsapp_connector/components/chatroom/tabs_container";
 import { LoadingIndicator } from "@whatsapp_connector/components/chatroom/loading_indicator";
 import { ChatroomHeader } from "@whatsapp_connector/components/chatroomHeader/chatroomHeader";
+import { ConversationName } from "@whatsapp_connector/components/conversationName/conversationName";
 import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 import { UserModel } from "@whatsapp_connector/models/user_model";
 import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
@@ -64,4 +65,4 @@ Chatroom.props = {
     action: { type: Object, optional: true },
     actionId: { type: Number, optional: true },
 };
-Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator, ChatroomHeader };
+Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator, ChatroomHeader, ConversationName };
