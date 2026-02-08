@@ -27,6 +27,8 @@ export class ChatroomService {
         this.modelsUsedFields = {};
         this.readFromChatroom = {};
         this.batchSize = 64;
+        this.showUserInMessage = false;
+        this.isChatroomAdmin = false;
 
         this.setupBus();
     }
@@ -40,7 +42,13 @@ export class ChatroomService {
             readFromChatroom: this.readFromChatroom,
             conversationBuildDict: this.buildModelBuildDict('acrux.chat.conversation', 'build_dict'),
             messageBuildDict: this.buildModelBuildDict('acrux.chat.message', 'search_read_from_chatroom', this._groupMessageResult.bind(this)),
-            isAdmin: () => session.is_admin,
+            isAdmin: () => session.is_admin || this.isChatroomAdmin,
+            getShowUser: () => this.showUserInMessage,
+            canTranslate: () => session.chatroom_ai_config_id,
+            canTranscribe: () => session.chatroom_ai_config_id,
+            getCurrentLang: () => session.chatroom_lang_id,
+            getCurrency: () => session.chatroom_currency_id,
+            isVerticalView: () => this.state.user?.data?.tabOrientation === 'vertical',
         });
     }
 
@@ -68,11 +76,14 @@ export class ChatroomService {
             }, {});
         }
         
-        if (data.user.chatroom_batch_process) {
-            this.batchSize = parseInt(data.user.chatroom_batch_process);
+        if (data.user) {
+            if (data.user.chatroom_batch_process) {
+                this.batchSize = parseInt(data.user.chatroom_batch_process);
+            }
+            this.showUserInMessage = data.user.show_user_in_message;
+            this.isChatroomAdmin = data.user.is_chatroom_admin;
+            await this.state.user.updateFromJson(data.user);
         }
-
-        this.state.user.updateFromJson(data.user);
         
         const env = this.getEnv();
         const convList = await Promise.all(data.conversations.map(async (convData) => {
@@ -214,7 +225,7 @@ export class ChatroomService {
             if (conv) {
                 await conv.updateFromJson(convData);
             } else {
-                conv = new ConversationModel({ env: this.env });
+                conv = new ConversationModel({ env: this.getEnv() });
                 await conv.updateFromJson(convData);
                 this.state.conversations.push(conv);
             }
@@ -236,7 +247,7 @@ export class ChatroomService {
             if (conv) {
                 await conv.updateFromJson(convData);
             } else {
-                conv = new ConversationModel({ env: this.env });
+                conv = new ConversationModel({ env: this.getEnv() });
                 await conv.updateFromJson(convData);
                 this.state.conversations.push(conv);
             }

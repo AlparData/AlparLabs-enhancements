@@ -1209,6 +1209,10 @@ class AcruxChatConversation(models.Model):
         user_pref = self.env.user.read(['id', 'chatroom_signing_active', 'acrux_chat_active'])[0]
         config_params = Conversations.get_config_parameters()
         user_pref.update(config_params)
+        user_pref.update({
+            'show_user_in_message': self.env.user.has_group('whatsapp_connector.group_chat_show_user_in_message'),
+            'is_chatroom_admin': self.env.user.has_group('whatsapp_connector.group_chatroom_admin'),
+        })
         
         # 2. Conversations
         active_ids = Conversations.search_active_conversation()
