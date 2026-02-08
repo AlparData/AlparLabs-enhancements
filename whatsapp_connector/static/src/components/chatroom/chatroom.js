@@ -13,6 +13,7 @@ import { ConversationList } from "@whatsapp_connector/components/conversationLis
 import { Toolbox } from "@whatsapp_connector/components/toolbox/toolbox";
 import { TabsContainer } from "@whatsapp_connector/components/chatroom/tabs_container";
 import { LoadingIndicator } from "@whatsapp_connector/components/chatroom/loading_indicator";
+import { ChatroomHeader } from "@whatsapp_connector/components/chatroomHeader/chatroomHeader";
 import { ConversationModel } from "@whatsapp_connector/models/conversation_model";
 import { UserModel } from "@whatsapp_connector/models/user_model";
 import { DefaultAnswerModel } from "@whatsapp_connector/models/default_answer_model";
@@ -59,4 +60,4 @@ export class Chatroom extends Component {
 }
 
 Chatroom.template = 'chatroom.Chatroom';
-Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator };
+Chatroom.components = { ConversationThread, ConversationHeader, ConversationList, Toolbox, TabsContainer, LoadingIndicator, ChatroomHeader };
