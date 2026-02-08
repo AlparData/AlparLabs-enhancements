@@ -624,23 +624,48 @@ class AcruxChatConversation(models.Model):
                 'tag_ids', 'note', 'allowed_lang_ids', 'conv_type', 'oldes_activity_date'] + activity_fields
 
     def build_dict(self, limit, offset=0, field_names: List[str] = None):
-        '''
-        :todo se debe optimizar la consulta SQL
-        '''
+        """
+        Optimized to avoid N+1 queries.
+        """
         AcruxChatMessages = self.env['acrux.chat.message']
         Tags = self.env['acrux.chat.conversation.tag']
         if not field_names:
             field_names = self.get_fields_to_read()
+        
         conversations = self.read(field_names)
-        if limit > 0:
-            for conv in conversations:
-                message_id = AcruxChatMessages.search([('contact_id', '=', conv['id'])],
-                                                      limit=limit, offset=offset)
-                message = message_id.get_js_dict()
-                conv['messages'] = message
+        if not conversations:
+            return []
+
+        conv_ids = [c['id'] for c in conversations]
+
+        # Batch fetch tags
+        tag_ids = set()
         for conv in conversations:
-            if conv['tag_ids']:
-                conv['tag_ids'] = Tags.browse(conv['tag_ids']).read(['id', 'name', 'color'])
+            if conv.get('tag_ids'):
+                tag_ids.update(conv['tag_ids'])
+        
+        tags_data = {t['id']: t for t in Tags.browse(list(tag_ids)).read(['id', 'name', 'color'])} if tag_ids else {}
+
+        # Batch fetch messages if needed
+        messages_by_conv = {}
+        if limit > 0:
+            # We still need to search per conversation due to the 'limit per conversation' requirement.
+            # However, search_read_from_chatroom now batches the heavy enrichment (_js_add_extra_data).
+            # We fetch all messages and then group them.
+            all_messages = AcruxChatMessages.search_read_from_chatroom(conv_ids, limit, offset)
+            for msg in all_messages:
+                c_id = msg['contact_id'][0]
+                if c_id not in messages_by_conv:
+                    messages_by_conv[c_id] = []
+                messages_by_conv[c_id].append(msg)
+
+        for conv in conversations:
+            # Map tags
+            if conv.get('tag_ids'):
+                conv['tag_ids'] = [tags_data[tid] for tid in conv['tag_ids'] if tid in tags_data]
+            # Map messages
+            conv['messages'] = messages_by_conv.get(conv['id'], [])
+            
         return conversations
 
     @api.model

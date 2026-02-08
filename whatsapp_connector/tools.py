@@ -37,21 +37,15 @@ def log_request_error(param, req=None):
     _logger.error(param, exc_info=True)
 
 
-def date2sure_str(value):
-    if isinstance(value, (date, datetime)):
-        return fields.Datetime.to_string(value)
-    else:
-        return value
-
-
 def date2sure_write(value):
-    ''' To ORM format '''
+    """
+    Convert a value to a format suitable for Odoo ORM writing.
+    Ensures that strings are converted to datetime objects and
+    datetime/date objects are returned as is.
+    """
     if isinstance(value, (date, datetime)):
-        return value  # Odoo 14
-        # return fields.Datetime.to_string(value)  # Old
-    else:
-        return fields.Datetime.to_datetime(value)  # Odoo 14
-        # return value  # Old
+        return value
+    return fields.Datetime.to_datetime(value)
 
 
 def date2local(self, date_field):

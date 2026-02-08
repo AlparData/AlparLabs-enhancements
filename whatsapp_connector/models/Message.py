@@ -157,19 +157,38 @@ class AcruxChatMessages(models.Model):
     def _js_add_extra_data(self, data: List[Dict], fields_to_read: List[str], load='_classic_read'):
         ListModel = self.env['acrux.chat.message.list']
         ButtonModel = self.env['acrux.chat.message.button']
-        button_fields = self.env['acrux.chat.button.base'].fields_get().keys()
-        fields_to_read = list(filter(lambda key: key != 'quote_id', fields_to_read))
-        quote_ids = [record['quote_id'][0] for record in data if record['quote_id']]
-        quoted_data = {msg['id']: msg for msg in self.browse(quote_ids).read(fields_to_read, load=load)}
+        button_fields = list(self.env['acrux.chat.button.base']._fields.keys())
+
+        # Collect IDs for batch processing
+        all_button_ids = []
+        list_ids = []
+        quote_ids = []
         for record in data:
-            if record['button_ids']:
-                record['button_ids'] = ButtonModel.browse(record['button_ids']).read(button_fields)
-            if record['chat_list_id']:
-                button_text = ListModel.browse(record['chat_list_id'][0]).read(['button_text'])[0]['button_text']
+            if record.get('button_ids'):
+                all_button_ids.extend(record['button_ids'])
+            if record.get('chat_list_id'):
+                list_ids.append(record['chat_list_id'][0])
+            if record.get('quote_id'):
+                quote_ids.append(record['quote_id'][0])
+
+        # Batch fetch
+        buttons_data = {btn['id']: btn for btn in ButtonModel.browse(all_button_ids).read(button_fields)} if all_button_ids else {}
+        lists_data = {lst['id']: lst['button_text'] for lst in ListModel.browse(list_ids).read(['button_text'])} if list_ids else {}
+        
+        quoted_data = {}
+        if quote_ids:
+            quote_fields = [f for f in fields_to_read if f != 'quote_id']
+            quoted_data = {msg['id']: msg for msg in self.browse(quote_ids).read(quote_fields, load=load)}
+
+        # Map back to data
+        for record in data:
+            if record.get('button_ids'):
+                record['button_ids'] = [buttons_data[btn_id] for btn_id in record['button_ids'] if btn_id in buttons_data]
+            if record.get('chat_list_id'):
                 record['chat_list_id'] = list(record['chat_list_id'])
-                record['chat_list_id'].append(button_text)
-            if record['quote_id']:
-                record['quote_id'] = quoted_data[record['quote_id'][0]]
+                record['chat_list_id'].append(lists_data.get(record['chat_list_id'][0], ''))
+            if record.get('quote_id'):
+                record['quote_id'] = quoted_data.get(record['quote_id'][0])
 
     @api.model
     def search_read_from_chatroom(self,
@@ -187,8 +206,8 @@ class AcruxChatMessages(models.Model):
                                          offset=offset,
                                          limit=limit,
                                          load=load)
-            self._js_add_extra_data(res, fields_to_read, load=load)
             out.extend(res)
+        self._js_add_extra_data(out, fields_to_read, load=load)
         return out
 
     def get_url_image(self, res_model, res_id, field='image_256', prod_id=False):

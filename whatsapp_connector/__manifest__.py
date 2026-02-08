@@ -80,14 +80,17 @@
     'assets': {
         'web.assets_backend': [
             'whatsapp_connector/static/src/scss/*.scss',
-
             'whatsapp_connector/static/src/odooCore/*/*.xml',
-
             'whatsapp_connector/static/src/components/*/*.scss',
             'whatsapp_connector/static/src/components/*/*.xml',
 
+            'whatsapp_connector/static/src/models/*.js',
+            'whatsapp_connector/static/src/js/*.js',
+            'whatsapp_connector/static/src/js/patches/*.js',
+            'whatsapp_connector/static/src/components/*/*.js',
+            'whatsapp_connector/static/src/services/*.js',
 
-            'whatsapp_connector/static/jslib/chatroom.js',
+            # 'whatsapp_connector/static/jslib/chatroom.js',
         ],
     },
     'post_load': '',

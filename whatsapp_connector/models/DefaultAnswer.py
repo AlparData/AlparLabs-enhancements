@@ -118,10 +118,19 @@ class AcruxChatDefaultAnswer(models.Model):
     def get_for_chatroom(self):
         out = self.search_read([('show_in_chatroom', '=', True)], self.get_fields_to_read())
         ButtonModel = self.env['acrux.chat.default.message.button']
-        button_fields = self.env['acrux.chat.button.base'].fields_get().keys()
+        button_fields = list(self.env['acrux.chat.button.base']._fields.keys())
+        
+        # Batch fetch buttons
+        all_button_ids = []
         for record in out:
-            if record['button_ids']:
-                record['button_ids'] = ButtonModel.browse(record['button_ids']).read(button_fields)
+            if record.get('button_ids'):
+                all_button_ids.extend(record['button_ids'])
+        
+        buttons_data = {btn['id']: btn for btn in ButtonModel.browse(all_button_ids).read(button_fields)} if all_button_ids else {}
+
+        for record in out:
+            if record.get('button_ids'):
+                record['button_ids'] = [buttons_data[btn_id] for btn_id in record['button_ids'] if btn_id in buttons_data]
         return out
 
     @api.constrains('chat_list_id', 'ttype', 'text')
