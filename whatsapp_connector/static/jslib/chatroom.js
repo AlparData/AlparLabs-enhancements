@@ -920,7 +920,7 @@ this.state.selectedConversation=conv
 if(this.myController){this.myController.props.selectedConversationId=conv?conv.id:undefined}
 if(conv){await conv.selected()
 this.env.chatBus.trigger('mobileNavigate','middleSide')}}
-notifactionSubscriber(){const out={new_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onNewMessage(m))}},init_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onInitConversation(m))}},change_status:(payload)=>{payload.map(m=>this.onChangeStatus(m))},update_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onUpdateConversation(m))}},error_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onErrorMessages(m))}}}
+notifactionSubscriber(){const out={new_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onNewMessage(m))}},init_conversation:(payload)=>{if(this.state.user.status){payload.map(m=>this.onInitConversation(m))}},change_status:(payload)=>{payload.map(m=>this.onChangeStatus(m))},update_conversation:(payload)=>{if(this.state.user.status){payload.forEach(m=>this.onUpdateConversation(m))}},error_messages:(payload)=>{if(this.state.user.status){payload.map(m=>this.onErrorMessages(m))}}}
 Object.entries(out).forEach(([key,value])=>{this.env.services.bus_service.subscribe(key,value)})
 return out}
 async onNewMessage(convData){const{desk_notify,messages}=convData
@@ -932,8 +932,12 @@ if(document.hidden){if('all'&&desk_notify||('mines'===desk_notify&&conv.agent.id
 this.env.services.notification.add(msg,{type:'info'})
 await this.playNotification()}}}else{if(someMessageNew&&this.state.selectedConversation?.id===conv.id&&conv.isCurrent()){await conv.messageSeen()}}}
 return conv}
-async onUpdateConversation(convData){await this.upsertConversation(convData)
-return this.state.conversations.find(x=>x.id===convData.id)}
+async onUpdateConversation(m){const conv=this.state.conversations.find(x=>x.id===m.id)
+if(conv){await conv.updateFromJson(m)
+if(this.state.selectedConversation?.id===conv.id){this.env.chatBus.trigger('updateConversation',{conv})}
+return conv}
+await this.upsertConversation(m)
+return this.state.conversations.find(x=>x.id===m.id)}
 async onInitConversation(convData){await this.upsertConversation(convData)
 const conv=this.state.conversations.find(x=>x.id===convData.id)
 if(conv){this.env.chatBus.trigger('selectConversation',{conv})}
@@ -1049,20 +1053,26 @@ this.env;}
 onClick(){this.env.chatBus.trigger(this.props.selectTrigger,this.props.conversation)}}
 Object.assign(ConversationCard,{template:'chatroom.ConversationCard',props:{conversation:ConversationModel.prototype,className:{type:String,optional:true},selectTrigger:{type:String,optional:true},},defaultProps:{className:'',selectTrigger:'initAndNotifyConversation',},components:{}})
 return __exports;});;
-odoo.define('@beeaf954ff9ccf25f357f70e74c5694ebdfbd24b19c687bd9a0808adec370c9f',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef','@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+odoo.define('@beeaf954ff9ccf25f357f70e74c5694ebdfbd24b19c687bd9a0808adec370c9f',['@odoo/owl','@web/core/utils/hooks','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef','@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+const{useBus}=require('@web/core/utils/hooks')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
 const{ConversationName}=require('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde')
 const ConversationHeader=__exports.ConversationHeader=class ConversationHeader extends Component{setup(){super.setup()
 this.env
-this.props}}
-Object.assign(ConversationHeader,{template:'chatroom.ConversationHeader',props:{selectedConversation:ConversationModel.prototype,},components:{ConversationName}})
+this.props
+useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===this.props.selectedConversation?.id){this.render()}})}
+static props = { selectedConversation: { type: ConversationModel.prototype, optional: true } }}
+Object.assign(ConversationHeader, { template: 'chatroom.ConversationHeader', components: { ConversationName } })
 return __exports;});;
-odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@web/core/utils/hooks','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+    const{useBus}=require('@web/core/utils/hooks')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
 const ConversationName=__exports.ConversationName=class ConversationName extends Component{setup(){super.setup()
 this.env
-this.props}}
-Object.assign(ConversationName,{template:'chatroom.ConversationName',props:{selectedConversation:ConversationModel.prototype,},})
+this.props
+useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===this.props.selectedConversation?.id){this.render()}})}
+static props = { selectedConversation: { type: ConversationModel.prototype, optional: true } }}
+Object.assign(ConversationName, { template: 'chatroom.ConversationName' })
 return __exports;});;
 odoo.define('@717da89923407d2bbdeadd4f99b9e8918889493cac89cdeb293e1e42f46b02fa',['@odoo/owl','@web/core/utils/hooks','@cd88eb6ddbd39307a4d8acd1cff882374d40d987a801fff227eb08b73df94690','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component,useRef,onWillUpdateProps,onPatched,onMounted}=require('@odoo/owl')
 const{useBus}=require('@web/core/utils/hooks')
