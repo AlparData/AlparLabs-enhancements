@@ -73,10 +73,7 @@ class Conversation(models.Model):
         if target_connector.notify_discuss:
             target_conv.notify_discuss_to_user(self.tmp_agent_id, 'I delegated a Chat to you.')
             
-        # Update source conversation
-        self.tmp_agent_id = False
-        self.set_to_done()
-        
+
         # Send notifications to update UI
         self._send_delegation_notifications(target_conv)
         
