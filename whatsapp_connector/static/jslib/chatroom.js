@@ -1060,6 +1060,7 @@ const ConversationHeader=__exports.ConversationHeader=class ConversationHeader e
 this.env
 this.props
 useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===this.props.selectedConversation?.id){this.render()}})}}
+Object.assign(ConversationHeader, { template: 'chatroom.ConversationHeader', components: { ConversationName } })
 return __exports;});;
 odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
@@ -1067,6 +1068,7 @@ const ConversationName=__exports.ConversationName=class ConversationName extends
 this.env
 this.props
 useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===this.props.selectedConversation?.id){this.render()}})}}
+Object.assign(ConversationName, { template: 'chatroom.ConversationName' })
 return __exports;});;
 odoo.define('@717da89923407d2bbdeadd4f99b9e8918889493cac89cdeb293e1e42f46b02fa',['@odoo/owl','@web/core/utils/hooks','@cd88eb6ddbd39307a4d8acd1cff882374d40d987a801fff227eb08b73df94690','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component,useRef,onWillUpdateProps,onPatched,onMounted}=require('@odoo/owl')
 const{useBus}=require('@web/core/utils/hooks')
