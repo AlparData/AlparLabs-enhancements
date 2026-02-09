@@ -1064,7 +1064,8 @@ useBus(this.env.chatBus,'updateConversation',({detail:{conv}})=>{if(conv.id===th
 static props = { selectedConversation: { type: ConversationModel.prototype, optional: true } }}
 Object.assign(ConversationHeader, { template: 'chatroom.ConversationHeader', components: { ConversationName } })
 return __exports;});;
-odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+odoo.define('@5a3fee26d6d9d1773c181ece51534258527ca03ba61426578e02cb70bb082bde',['@odoo/owl','@web/core/utils/hooks','@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef'],function(require){'use strict';let __exports={};const{Component}=require('@odoo/owl')
+    const{useBus}=require('@web/core/utils/hooks')
 const{ConversationModel}=require('@e71c685495b3fd5a77d050fe9a0ee4564da20c118bd360ce54260886e1bb13ef')
 const ConversationName=__exports.ConversationName=class ConversationName extends Component{setup(){super.setup()
 this.env
